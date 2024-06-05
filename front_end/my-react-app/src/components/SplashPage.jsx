@@ -1,21 +1,17 @@
 import React from "react";
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import '../index.scss';
 import campfireGif from '../assets/Campfire2D.gif'
 
 const SplashPage = () => {
     return (
-        <Container className="splash-page text-center">
-            <Row className="justify-content-center">
-                <Col md={8}>
-                    <h1>Greetings, Traveler</h1>
-                    <img src={campfireGif} alt="pixel campfire" className="img-fluid my-4" />
-                    <div className="buttons">
-                        <button onClick={() => alert('Log In Clicked')}>Log In</button>
-                        <button onClick={() => alert('Sign Up Clicked')}>Sign Up</button>
-                    </div>
-                </Col>
-            </Row>
+        <Container fluid className="splash-page text-center">
+            <h1>Greetings, Traveler</h1>
+            <img src={campfireGif} alt="pixel campfire" className="img-fluid" />
+            <div className="buttons">
+                <Button variant="primary" size="lg" className="my-2">Log In</Button>
+                <Button variant="secondary" size="lg" className="my-2">Sign Up</Button>
+            </div>
         </Container>
     )
 }
