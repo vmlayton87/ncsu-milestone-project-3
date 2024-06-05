@@ -1,7 +1,9 @@
 @import 'bootstrap/scss/bootstrap';
+@import './styles/_animation.scss';
 
 body {
   background-color: #1b1b1b;
+  outline: red 1px;
 }
 
 .splash-page {
@@ -32,7 +34,7 @@ body {
     position: absolute;
     top: 60%;
     left: 50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%) // Credit to chatGPT for helping manipulate image positioning.
   }
 
   .buttons {
@@ -47,6 +49,47 @@ body {
 
     .btn {
       margin: 10px 20px;
+      @include button-click-animation;
+      box-shadow: 0 4px 0 rgb(223, 223, 223);
+
+      &:active {
+        animation: button-press 0.2s;
+        box-shadow: 0 2px 0 rgba(223, 223, 223);
+      }
+    }
+  }
+}
+
+
+// Media queries, tablet size
+@media (max-width: 768px) {
+  .img-fluid {
+    max-width: 70%;
+  }
+
+  .buttons {
+    flex-direction: column;
+
+    .btn {
+      margin: 10px 0;
+      width: 80%;
+    }
+  }
+}
+
+//Mobile size
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5em;
+  }
+
+  .img-fluid {
+    max-width: 80%;
+  }
+
+  .buttons {
+    .btn {
+      width: 90%;
     }
   }
 }
