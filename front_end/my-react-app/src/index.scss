@@ -3,7 +3,6 @@
 
 body {
   background-color: #1b1b1b;
-  outline: red 1px;
 }
 
 .splash-page {
@@ -66,6 +65,32 @@ body {
         animation: button-press 0.2s;
         box-shadow: 0 2px 0 rgba(223, 223, 223);
       }
+    }
+  }
+}
+
+
+.signup-page {
+  h2 {
+    font-family: 'Amarante';
+    color: #f0f0f0;
+  }
+
+  .form-label {
+    color: #f0f0f0;
+  }
+
+  .btn {
+    font-family: 'Amarante';
+    margin: 20px 0;
+    @include button-click-animation;
+    box-shadow: 0 4px 0 rgb(223, 223, 223);
+    min-width: 150px;
+    flex: none;
+
+    &:active {
+      animation: button-press 0.2s;
+      box-shadow: 0 2px 0 rgba(223, 223, 223);
     }
   }
 }
