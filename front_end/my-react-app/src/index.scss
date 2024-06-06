@@ -1,0 +1,132 @@
+@import 'bootstrap/scss/bootstrap';
+@import './styles/_animation.scss';
+
+body {
+  background-color: #1b1b1b;
+}
+
+.splash-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #1b1b1b;
+  text-align: center;
+  position: relative;
+  padding: 0 20px;
+
+  h1 {
+    margin-bottom: 20px;
+    color: #f0f0f0;
+    font-family: 'Amarante';
+    font-weight: 400;
+    font-style: normal;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 100%;
+    font-size: 3.5em;
+    @include flicker;
+  }
+
+  .img-fluid {
+    width: auto;
+    height: auto;
+    max-height: 40vh;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%) // Credit to chatGPT for helping manipulate image positioning.
+  }
+
+  .buttons {
+    font-family: 'Amarante';
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+
+    .btn {
+      margin: 10px 20px;
+      @include button-click-animation;
+      box-shadow: 0 4px 0 rgb(223, 223, 223);
+      min-width: 150px;
+      flex: none;
+
+      &:active {
+        animation: button-press 0.2s;
+        box-shadow: 0 2px 0 rgba(223, 223, 223);
+      }
+    }
+  }
+}
+
+
+.signup-page {
+  h2 {
+    font-family: 'Amarante';
+    color: #f0f0f0;
+  }
+
+  .form-label {
+    color: #f0f0f0;
+  }
+
+  .btn {
+    font-family: 'Amarante';
+    margin: 20px 0;
+    @include button-click-animation;
+    box-shadow: 0 4px 0 rgb(223, 223, 223);
+    min-width: 150px;
+    flex: none;
+
+    &:active {
+      animation: button-press 0.2s;
+      box-shadow: 0 2px 0 rgba(223, 223, 223);
+    }
+  }
+}
+
+
+// Media queries, tablet size
+@media (max-width: 768px) {
+  .img-fluid {
+    max-width: 70%;
+    width: auto;
+  }
+
+  .buttons {
+    flex-direction: column;
+    width: auto;
+
+    .btn {
+      margin: 10px 0;
+      width: 60%;
+    }
+  }
+}
+
+//Mobile size
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8em;
+  }
+
+  .img-fluid {
+    width: 80%;
+  }
+
+  .buttons {
+    .btn {
+      width: 40%;
+    }
+  }
+}
