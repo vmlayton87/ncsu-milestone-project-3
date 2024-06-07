@@ -1,4 +1,4 @@
-# placeholder name
+# TomeTracker
 Description
 For this project, we are creating an application used to manage various table top campaigns, through campaign creation, editing, and character creation and updating. Our main goal was to create a "one stop shop" application that can be utilized by both Dungeon Masters and players for various utilities. 
 
