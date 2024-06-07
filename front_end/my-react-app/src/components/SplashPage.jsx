@@ -3,6 +3,8 @@ import { Container, Button } from 'react-bootstrap';
 import '../index.scss';
 import campfireGif from '../assets/Campfire2D.gif'
 
+// To-do: if user is logged in, this page should route to /dashboard
+
 const SplashPage = () => {
     return (
         <Container fluid className="splash-page text-center">

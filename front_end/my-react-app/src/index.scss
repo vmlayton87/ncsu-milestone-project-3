@@ -122,6 +122,12 @@ body {
     }
 }
 
+.dashboard {
+  background-color: #1b1b1b;
+  font-family: 'Amarante';
+  color: #f0f0f0;
+}
+
 // Media queries, tablet size
 @media (max-width: 768px) {
   .img-fluid {
