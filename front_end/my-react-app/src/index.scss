@@ -78,6 +78,7 @@ body {
 
   .form-label {
     color: #f0f0f0;
+    padding: 20px 0;
   }
 
   .btn {
@@ -95,6 +96,37 @@ body {
   }
 }
 
+.login-page {
+  h2 {
+      font-family: 'Amarante';
+      color: #f0f0f0;
+    }
+  
+    .form-label {
+      color: #f0f0f0;
+      padding: 20px 0;
+    }
+  
+    .btn {
+      font-family: 'Amarante';
+      margin: 20px 0;
+      @include button-click-animation;
+      box-shadow: 0 4px 0 rgb(223, 223, 223);
+      min-width: 150px;
+      flex: none;
+  
+      &:active {
+        animation: button-press 0.2s;
+        box-shadow: 0 2px 0 rgba(223, 223, 223);
+      }
+    }
+}
+
+.dashboard {
+  background-color: #1b1b1b;
+  font-family: 'Amarante';
+  color: #f0f0f0;
+}
 
 // Media queries, tablet size
 @media (max-width: 768px) {
