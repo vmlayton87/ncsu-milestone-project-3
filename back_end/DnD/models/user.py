@@ -1,7 +1,7 @@
 from .. import db
 
 
-#Create a 'Fact' Class
+
 class User(db.Model):
     #set table name
     __tablename__ = 'users'

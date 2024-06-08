@@ -1,23 +1,14 @@
 from flask import Flask 
-#import SQLAlchemy from flask_sqlalchemy
-from flask_sqlalchemy import SQLAlchemy
 
 from dotenv import load_dotenv
 import os
 load_dotenv()
 
+#import SQLAlchemy from flask_sqlalchemy
+from flask_sqlalchemy import SQLAlchemy
+
 # Initialize SQLAlchemy
 db = SQLAlchemy()
-
-# Import models
-from .models.user import User
-from .models.campaign import Campaign
-from .models.note import Note
-from .models.character import Character
-
-# Import association tables
-from .models.user_campaigns import user_campaigns
-from .models.character_campaigns import character_campaigns
 
 #app factory
 def create_app():
@@ -35,11 +26,22 @@ def create_app():
     from flask_migrate import Migrate
     migrate = Migrate(app, db)
 
+     # Import models
+    from .models.user import User
+    from .models.campaign import Campaign
+    from .models.note import Note
+    from .models.character import Character
+
+    # Import association tables
+    from .models.character_campaigns import Character_campaign
+    from .models.user_campaigns import User_campaign
+    
+
     #register blueprints here
 
     @app.route('/')
     def index():
-        return 'Hello, this is Reptiles API very first index page!'
+        return 'Hello, this is DnD APIs very first index page!'
 
 
     return app
