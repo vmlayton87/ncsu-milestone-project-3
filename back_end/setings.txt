@@ -1,7 +1,7 @@
 to create the environment: 
     py -m venv venv
 to activate the environment: 
-    . venv\Scripts\activate
+    . venv/Scripts/activate
 then install flask: 
     pip install Flask psycopg2-binary
 install SQL-Alchemy
@@ -10,6 +10,8 @@ install python dotenv
     pip install python-dotenv
 install Flask Migrate
     pip install Flask-Migrate
+then run flask:
+    flask run --reload
 close flask 
     CRTL + c
 deactivate venv
