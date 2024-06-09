@@ -172,32 +172,38 @@ body {
     height: 100%;
 
     .dice-roller {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-
-      .dice-buttons {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        gap: 5px;
-
-        button {
-          padding: 5px 10px;
-          font-size: 12px;
-          cursor: pointer;
+        justify-content: center;
+        gap: 10px;
+    
+        .dice-buttons {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 5px;
+    
+          .dice-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+    
+            img {
+              width: 40px; // Adjust size as needed
+              height: 40px; // Adjust size as needed
+            }
+          }
+        }
+    
+        .result {
+          margin-top: 10px;
+          font-size: 14px;
+          font-weight: bold;
+          color: #fff;
         }
       }
-
-      .result {
-        margin-top: 10px;
-        font-size: 14px;
-        font-weight: bold;
-        color: #fff;
-      }
-    }
   }
 }
 
