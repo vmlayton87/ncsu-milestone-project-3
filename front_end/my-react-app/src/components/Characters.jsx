@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import '../index.scss';
 
-const Campaigns = () => {
+const Characters = () => {
     const { id } = useParams();
 
     const characterSheet = {
@@ -26,7 +26,7 @@ const Campaigns = () => {
     ];
 
     return (
-        <div className="campaigns">
+        <div className="characters">
             <h2>Campaign {id}</h2>
             <div className="character-sheet">
                 <h3>Character Sheet</h3>
@@ -54,4 +54,4 @@ const Campaigns = () => {
     );
 };
 
-export default Campaigns;
+export default Characters;
