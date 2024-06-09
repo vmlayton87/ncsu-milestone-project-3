@@ -5,7 +5,7 @@ import Navigation from "./Navigation";
 import DmCard from "./DmCard";
 
 // Import images
-import image1 from '../assets/cardimage-1.jpg'
+import gideon from '../assets/gideon.png'
 import image2 from '../assets/cardimage-2.jpg'
 import image3 from '../assets/cardimage-3.jpg'
 
@@ -20,17 +20,17 @@ const Dashboard = () => {
             ac: '17',
             speed: '30ft',
             passivePerception: '15',
-            image: image1
+            image: image3
         },
         { 
             id: 2,
-            name: 'Jeremiah Dreamweaver',
+            name: 'Jedidiah Dreamweaver',
             currentHP: '66',
             maxHP: '66',
             ac: '15',
             speed: '30ft',
             passivePerception: '14',
-            image: image2
+            image: image3
         },
         { 
             id: 3,
@@ -44,7 +44,7 @@ const Dashboard = () => {
         },
         { 
             id: 4,
-            name: 'Ozireth',
+            name: 'Ozirath',
             currentHP: '49',
             maxHP: '49',
             ac: '12',
@@ -54,7 +54,7 @@ const Dashboard = () => {
         },
         { 
             id: 5,
-            name: 'Vromalon',
+            name: 'Vromaalan',
             currentHP: '72',
             maxHP: '91',
             ac: '19',
