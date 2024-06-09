@@ -14,6 +14,7 @@ import Dashboard from './components/Dashboard.jsx'
 import ConditionalNavigation from './components/ConditionalNavigation.jsx'
 import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
+import DiceDrawer from './components/DiceDrawer.jsx'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           // Handle logout logic here
         }} />
       </Routes>
+      {location.pathname !=='/' && <DiceDrawer />}
     </Router>
   )
 }
