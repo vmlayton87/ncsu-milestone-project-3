@@ -13,6 +13,7 @@ import Login from './components/Login.jsx'
 import Dashboard from './components/Dashboard.jsx'
 import ConditionalNavigation from './components/ConditionalNavigation.jsx'
 import Campaigns from './components/Campaigns.jsx'
+import DmDashboard from './components/DmDashboard.jsx'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dmdashboard" element={<DmDashboard />} />
         <Route path="/campaigns" element={<Campaigns />} /> {/* Ensure this component exists */}
         <Route path="/logout" element={() => {
           // Handle logout logic here
