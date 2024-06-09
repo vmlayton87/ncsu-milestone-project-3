@@ -11,7 +11,7 @@ class Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-     # Additional columns
+    # Additional columns
     name = db.Column(db.String(250))
     classLevel = db.Column(db.String(250))
     background = db.Column(db.String(250))
