@@ -16,7 +16,7 @@ const DiceDrawer = () => {
     return (
         <div className={`dice-drawer ${isOpen ? 'open' : ''}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div className="drawer-content">
-                <DiceRoller />
+                {isOpen ? <DiceRoller /> : <span className="drawer-text">Dice Drawer</span>}
             </div>
         </div>
     );

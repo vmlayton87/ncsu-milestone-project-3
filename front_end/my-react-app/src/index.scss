@@ -150,7 +150,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50px; // Height when not hovered
+  height: 50px;
   background-color: #333;
   color: #fff;
   display: flex;
@@ -161,7 +161,7 @@ body {
   z-index: 1000;
 
   &.open {
-    height: 200px; // Height when hovered
+    height: 200px;
   }
 
   .drawer-content {
@@ -171,39 +171,57 @@ body {
     justify-content: center;
     height: 100%;
 
+    .drawer-text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+    }
+
     .dice-roller {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      .dice-buttons {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
-        gap: 10px;
-    
-        .dice-buttons {
+        gap: 30px;
+
+        .dice-container {
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
           align-items: center;
-          gap: 5px;
-    
+
+          .dice-label {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #fff;
+          }
+
           .dice-button {
             background: none;
             border: none;
             padding: 0;
             cursor: pointer;
-    
+
             img {
-              width: 40px; // Adjust size as needed
-              height: 40px; // Adjust size as needed
+              width: 40px;
+              height: 40px;
             }
           }
         }
-    
-        .result {
-          margin-top: 10px;
-          font-size: 14px;
-          font-weight: bold;
-          color: #fff;
-        }
       }
+
+      .result {
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+      }
+    }
   }
 }
 
