@@ -77,7 +77,6 @@ body {
   }
 }
 
-
 .signup-page {
   h2 {
     font-family: 'Amarante';
@@ -142,6 +141,87 @@ body {
     justify-content: center;
     gap: 20px;
     padding: 20px;
+  }
+}
+
+// Credit to chatGPT for animation and layout for dice drawer
+.dice-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: height 0.3s ease;
+  overflow: hidden;
+  z-index: 1000;
+
+  &.open {
+    height: 200px;
+  }
+
+  .drawer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .drawer-text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .dice-roller {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      .dice-buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 30px;
+
+        .dice-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .dice-label {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #fff;
+          }
+
+          .dice-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+
+            img {
+              width: 40px;
+              height: 40px;
+            }
+          }
+        }
+      }
+
+      .result {
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+      }
+    }
   }
 }
 
