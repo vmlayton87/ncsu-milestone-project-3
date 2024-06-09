@@ -5,6 +5,7 @@ import './App.css'
 
 // Components import
 import SplashPage from './components/SplashPage.jsx'
+import DmCard from './components/DmCard.jsx'
 import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import Dashboard from './components/Dashboard.jsx'
@@ -17,6 +18,5 @@ function App() {
     </div>
   )
 }
-
 
 export default App
