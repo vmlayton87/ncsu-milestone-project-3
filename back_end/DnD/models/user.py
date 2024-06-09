@@ -15,3 +15,11 @@ class User(db.Model):
     notes = db.relationship('Note', back_populates = 'user')
     characters = db.relationship('Character', back_populates = 'user')
     campaigns = db.relationship('Campaign', secondary= 'user_campaigns', back_populates = 'users')
+
+    def to_dict(self):
+            return {
+                'id': self.id,
+                'user_name': self.user_name,
+                'hashed_password': self.hashed_password
+            }
+  
