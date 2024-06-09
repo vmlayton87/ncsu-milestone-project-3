@@ -1,22 +1,37 @@
 // Dependencies import
 import React from 'react'
 import { useState } from 'react'
-import './App.css'
+import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-router-dom'
+
 
 // Components import
+import './App.css'
 import SplashPage from './components/SplashPage.jsx'
+import DmCard from './components/DmCard.jsx'
 import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import Dashboard from './components/Dashboard.jsx'
-import Navigation from './components/Navigation.jsx'
+import ConditionalNavigation from './components/ConditionalNavigation.jsx'
+import Characters from './components/Characters.jsx'
+import DmDashboard from './components/DmDashboard.jsx'
 
 function App() {
   return (
-    <div className="App">
-      <Dashboard />
-    </div>
+    <Router>
+      <ConditionalNavigation />
+      <Routes>
+        <Route path="/" element={<SplashPage />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dmdashboard" element={<DmDashboard />} />
+        <Route path="/characters" element={<Characters />} />
+        <Route path="/logout" element={() => {
+          // Handle logout logic here
+        }} />
+      </Routes>
+    </Router>
   )
 }
-
 
 export default App
