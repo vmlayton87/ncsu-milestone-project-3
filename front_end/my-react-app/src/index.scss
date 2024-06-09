@@ -201,6 +201,28 @@ body {
   }
 }
 
+.dm-cards {
+  min-width: 30%;
+  max-width: 30%;
+  min-height: 25%;
+  max-height: 25%;
+  margin: auto;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+
+  .card {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+  }
+
+  .card-img-top {
+    height: 30%;
+    width: 30%;
+  }
+}
+
 // Card animation credit, @usual.coder via Instagram
 // Credit for help with perspective: https: //stackoverflow.com/questions/42246691/css-perspective-for-each-element
 .card-container {
