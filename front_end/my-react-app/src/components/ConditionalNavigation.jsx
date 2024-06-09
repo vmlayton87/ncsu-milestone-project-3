@@ -1,4 +1,5 @@
 // This component only renders the navbar if not on the splash page.
+// Credit: Mosh Hamedani, @Programming with Mosh on YouTube
 
 import React from 'react'
 import Navigation from './Navigation'
