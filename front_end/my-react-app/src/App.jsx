@@ -25,10 +25,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dmdashboard" element={<DmDashboard />} />
-        <Route path="/campaigns" element={<Campaigns />} /> {/* Ensure this component exists */}
+        <Route path="/campaigns" element={<Campaigns />} />
         <Route path="/logout" element={() => {
           // Handle logout logic here
-          return <div>Logging out...</div>;
         }} />
       </Routes>
     </Router>
