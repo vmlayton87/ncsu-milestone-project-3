@@ -11,10 +11,11 @@ import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import Dashboard from './components/Dashboard.jsx'
 import ConditionalNavigation from './components/ConditionalNavigation.jsx'
-import Campaigns from './components/Campaigns.jsx'
+import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
 import CharacterSheet from './components/CharacterSheet.jsx'
 import CharacterSheetTSX from './components/CharacterSheet.tsx'
+import DiceDrawer from './components/DiceDrawer.jsx'
 
 function App() {
   return (
@@ -28,11 +29,12 @@ function App() {
         <Route path="/dmdashboard" element={<DmDashboard />} />
         <Route path="/charactersheet" element={<CharacterSheetTSX />} />
         <Route path="/campaigns" element={<Campaigns />} /> {/* Ensure this component exists */}
+        <Route path="/characters" element={<Characters />} />
         <Route path="/logout" element={() => {
           // Handle logout logic here
-          return <div>Logging out...</div>;
         }} />
       </Routes>
+      {location.pathname !=='/' && <DiceDrawer />}
     </Router>
   )
 }
