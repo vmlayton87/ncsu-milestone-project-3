@@ -26,16 +26,29 @@ const Signup = () => {
         if (formData.password !== formData.confirmPassword) {
             alert('Password and Confirm Password are not the same!');
         } else {
+            //Generate salt and hash
             bcrypt.genSalt(12, function(err, salt) {
                 bcrypt.hash(formData.password, salt, function(err, hash) {
                     if (err){
                         console.log("error", err)
                     } else {
                         // Store hash and other data in the user table.
+                        const userData = {
+                            user_name: formData.username,
+                            email: formData.email,
+                            hashed_password: hash
+                        }
 
-
-                        //delete the console log after testing
-                        console.log(hash)
+                        fetch ('/users',{
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(userData)
+                        })
+                        .then(response => response.json())  
+                        .then(data => console.log('success', data))
+                        .catch((error)=> console.log('Error', error))
                     }
                 });
             });
