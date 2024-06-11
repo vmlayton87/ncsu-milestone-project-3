@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
+import bcrypt from 'bcryptjs';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -22,6 +23,24 @@ const Signup = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
+        if (formData.password !== formData.confirmPassword) {
+            alert('Password and Confirm Password are not the same!');
+        } else {
+            bcrypt.genSalt(12, function(err, salt) {
+                bcrypt.hash(formData.password, salt, function(err, hash) {
+                    if (err){
+                        console.log("error", err)
+                    } else {
+                        // Store hash and other data in the user table.
+
+
+                        //delete the console log after testing
+                        console.log(hash)
+                    }
+                });
+            });
+        }
+        //delete the console log after testing
         console.log(formData)
     }
 
