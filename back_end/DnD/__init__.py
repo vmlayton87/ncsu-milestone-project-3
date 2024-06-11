@@ -16,6 +16,9 @@ db = SQLAlchemy()
 # Initialize JWT
 jwt = JWTManager()
 
+#import blueprint registration function
+from .blueprints import register_blueprints
+
 #app factory
 def create_app():
     app = Flask(__name__)
@@ -46,6 +49,7 @@ def create_app():
     
 
     #register blueprints here
+    register_blueprints(app)
 
     @app.route('/')
     def index():

@@ -72,7 +72,7 @@ const Signup = () => {
                 password: formData.password
             }
 
-            const response = await fetch ('/register',{
+            const response = await fetch ('/auth/register',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

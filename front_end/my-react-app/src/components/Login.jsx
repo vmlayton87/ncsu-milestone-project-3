@@ -21,7 +21,7 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
-        fetch('/auth', {
+        fetch('/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

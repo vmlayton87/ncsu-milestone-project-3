@@ -2,16 +2,10 @@
 from flask import Blueprint, jsonify, request
 
 # import the model for this blueprint
-from DnD.models import User
+from ..models.user import User
 
 # import database
-from DnD.config.database_extension import db
-
-#import flask_bcrypt
-from flask_bcrypt import Bcrypt
-
-#initialize flask_bcrypt
-bcrypt = Bcrypt()
+from .. import db
 
 # initialize the blueprint named notes
 user_bp = Blueprint('user', __name__)
