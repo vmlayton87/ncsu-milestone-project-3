@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import useHistory from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
 
@@ -20,8 +20,7 @@ const Signup = () => {
         })
     }
 // function to submit form
-
-    const history = useHistory();
+    const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
@@ -44,7 +43,7 @@ const Signup = () => {
             .then(response => response.json())  
             .then(data => {
                 console.log('success', data);
-                history.push('/login');
+                navigate('/login');
             })
             .catch((error)=> console.log('Error', error));
           }

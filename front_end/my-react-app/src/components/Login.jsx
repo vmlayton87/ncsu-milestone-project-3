@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
-import bcrypt from 'bcryptjs';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -16,20 +16,17 @@ const Login = () => {
             [name]: value
         })
     }
+
+    const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
-        const loginData = {
-            username: formData.username,
-            password: formData.password
-        }
-
         fetch('/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(loginData)
+            body: JSON.stringify(formData)
         })
             .then(response => response.json())
             .then(data => {
@@ -38,12 +35,10 @@ const Login = () => {
                     alert('Incalid user or password.');
                 } else {
                     console.log('Success:', data);
-                    history.push('/dashboard');
+                    navigate('/dashboard');
                 }
                 console.log(data)
             })
-
-        console.log(formData)
     }
 
     return (
