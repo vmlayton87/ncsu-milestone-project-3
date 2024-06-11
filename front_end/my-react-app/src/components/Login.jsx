@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
+import bcrypt from 'bcryptjs';
 
 const Login = () => {
     const [formData, setFormData] = useState({

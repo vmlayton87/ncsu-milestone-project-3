@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import useHistory from "react-router-dom";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
 import bcrypt from 'bcryptjs';
@@ -20,6 +21,8 @@ const Signup = () => {
         })
     }
 // function to submit form
+
+    const history = useHistory();
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
@@ -47,8 +50,11 @@ const Signup = () => {
                             body: JSON.stringify(userData)
                         })
                         .then(response => response.json())  
-                        .then(data => console.log('success', data))
-                        .catch((error)=> console.log('Error', error))
+                        .then(data => {
+                            console.log('success', data);
+                            history.push('/login');
+                        })
+                        .catch((error)=> console.log('Error', error));
                     }
                 });
             });
