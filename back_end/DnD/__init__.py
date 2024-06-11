@@ -7,8 +7,14 @@ load_dotenv()
 #import SQLAlchemy from flask_sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 
+#import JWT library
+from flask_jwt_extended import JWTManager
+
 # Initialize SQLAlchemy
 db = SQLAlchemy()
+
+# Initialize JWT
+jwt = JWTManager()
 
 #app factory
 def create_app():
@@ -16,8 +22,10 @@ def create_app():
     
     #config sql database(need to create a database in postgres first)
     sql_password = os.getenv('SQL_PASSWORD')
+    jwt_secret_key = os.getenv('JWT_SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = sql_password
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['JWT_SECRET_KEY'] = jwt_secret_key
 
     # Initialize database
     db.init_app(app)

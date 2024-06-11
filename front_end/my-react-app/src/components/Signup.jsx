@@ -21,32 +21,68 @@ const Signup = () => {
     }
 // function to submit form
     const navigate = useNavigate();
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
+        const existingUserCheck = async() => {
+            const response = await fetch(`/users?user_name=${formData.username}`);
+            const user = await response.json();
+            return user;
+        }
+
+        const existingEmailCheck = async () => {
+            const response = await fetch(`/users?email=${formData.email}`);
+            const email = await response.json();
+            return email;
+        }
+
         if (formData.password !== formData.confirmPassword) {
             alert('Password and Confirm Password are not the same!');
-        } else {
+            return;
+        } 
+        
+        try {
+
+            const usernameExists = await existingUserCheck();
+            const emailExists = await existingEmailCheck();
+
+            if (usernameExists) {
+                alert('User already exists!');
+                return;
+            }
+
+            if (emailExists) {
+                alert('Email already exists!');
+                return;
+            }
+
             const userData = {
                 username: formData.username,
                 email: formData.email,
                 password: formData.password
             }
 
-            fetch ('/users',{
+            const response = await fetch ('/register',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(userData)
-            })
-            .then(response => response.json())  
-            .then(data => {
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
                 console.log('success', data);
                 navigate('/login');
-            })
-            .catch((error)=> console.log('Error', error));
-          }
+            } else {
+                console.log('Error', data);
+                alert(data.error || 'Registration failed. Please try again.');
+            }
+
+        } catch (error) {
+            console.log('Error', error);
+            alert('An error occurred. Please try again.');
         }
 
     return (
