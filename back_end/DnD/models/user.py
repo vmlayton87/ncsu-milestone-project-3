@@ -9,6 +9,7 @@ class User(db.Model):
     #set columns with data types
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(250))
+    email = db.Column(db.String(250))
     hashed_password = db.Column(db.String(250))
     
     #define relationship to Note
