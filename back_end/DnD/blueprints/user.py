@@ -1,8 +1,6 @@
 # blueprint/routes for the note table
 from flask import Blueprint, jsonify, request
 
-# import joinedload to allow us to join the information in one query
-from sqlalchemy.orm import joinedload
 # import the model for this blueprint
 from DnD.models import User
 
@@ -34,13 +32,8 @@ def get_users():
 @user_bp.route('/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:
-        user = User.query.get(user_id)
-        notes_data = [note.to_dict() for note in user.notes] # get the notes and turn it in a json object
-        # convert user to a dictionary to add notes to it
-        user_data = user.to_dict()
-        # now add the notes to the dictionary
-        user_data['notes'] = notes_data
-        return jsonify(user_data)
+        user = User.query.get(user_id)     
+        return jsonify(user_data.to_dict())
     except Exception as err:
         print(f"Error: {err}")
         return jsonify({'error': 'Failed to retrieve user'}), 500
@@ -64,7 +57,7 @@ def new_user():
 @user_bp.route('/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     data = request.get_json() #get_json gets the json request.
-    user = User.query.get(user_id)
+    
     try:
         User.query.filter_by(id=user_id).update(data)
         db.session.commit()

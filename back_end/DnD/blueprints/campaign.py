@@ -43,7 +43,9 @@ def get_user(campaign_id):
 # post a new campaign
 def new_campaign():
     try:
+        
         data = request.get_json() #get_json gets the json request.
+        
         new_campaign = Campaign(**data)  # the ** unpacks the dictionary data and passes its key value pairs as arguments 
         db.session.add(new_campaign)
         db.session.commit()
