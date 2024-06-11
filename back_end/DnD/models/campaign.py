@@ -1,6 +1,6 @@
 # campaigns table in Tome Tracker
 from sqlalchemy.inspection import inspect
-from DnD.config.database_extension import db
+from .config import db
 
 class Campaign(db.Model):
     #set table name
@@ -10,6 +10,9 @@ class Campaign(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(250))
     dm = db.Column(db.Integer, db.ForeignKey('users.id')) # only one DM per campaign.
+    name = db.Column(db.String(250))
+    description = db.Column(db.TEXT)
+    image_url = db.Column(db.String(250))
     
     
     # many-to-many relationship for user_campaigns. this creates a bidirectional relationship.

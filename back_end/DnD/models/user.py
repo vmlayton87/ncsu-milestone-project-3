@@ -8,7 +8,8 @@ class User(db.Model):
     
     #set columns with data types
     id = db.Column(db.Integer, primary_key=True)
-    usename = db.Column(db.String(250))
+    email = db.Column(db.String(250))
+    username = db.Column(db.String(250))
     password = db.Column(db.String(250))
     
     #DEFINE RELATIONSHIPS

@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
 
@@ -19,10 +20,80 @@ const Signup = () => {
         })
     }
 // function to submit form
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
-        console.log(formData)
+        const existingUserCheck = async () => {
+            try {
+                const response = await fetch(`/users?user_name=${formData.username}`);
+                const users = await response.json();
+                return users.length > 0; 
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                throw error; 
+            }
+        }
+        
+        const existingEmailCheck = async () => {
+            try {
+                const response = await fetch(`/users?email=${formData.email}`);
+                const emails = await response.json();
+                return emails.length > 0; 
+            } catch (error) {
+                console.error('Error fetching emails:', error);
+                throw error;
+            }
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            alert('Password and Confirm Password are not the same!');
+            return;
+        } 
+        
+        try {
+
+            const usernameExists = await existingUserCheck();
+            const emailExists = await existingEmailCheck();
+
+            if (usernameExists) {
+                alert('User already exists!');
+                return;
+            }
+
+            if (emailExists) {
+                alert('Email already exists!');
+                return;
+            }
+
+            const userData = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password
+            }
+
+            const response = await fetch ('/auth/register',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('success', data);
+                navigate('/login');
+            } else {
+                console.log('Error', data);
+                alert(data.error || 'Registration failed. Please try again.');
+            }
+
+        } catch (error) {
+            console.log('Error', error);
+            alert('An error occurred. Please try again.');
+        }
     }
 
     return (

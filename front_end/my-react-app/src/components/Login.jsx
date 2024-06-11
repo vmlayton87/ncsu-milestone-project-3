@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -15,10 +16,29 @@ const Login = () => {
             [name]: value
         })
     }
+
+    const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
-        console.log(formData)
+        fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error){
+                    console.log('Error: ', data.error);
+                    alert('Incalid user or password.');
+                } else {
+                    console.log('Success:', data);
+                    navigate('/dashboard');
+                }
+                console.log(data)
+            })
     }
 
     return (
