@@ -39,7 +39,7 @@ const Signup = () => {
                         const userData = {
                             user_name: formData.username,
                             email: formData.email,
-                            hashed_password: hash
+                            hash: hash
                         }
 
                         fetch ('/users',{

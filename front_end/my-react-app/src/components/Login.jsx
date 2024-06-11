@@ -19,6 +19,30 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
+        const loginData = {
+            username: formData.username,
+            password: formData.password
+        }
+
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error){
+                    console.log('Error: ', data.error);
+                    alert('Incalid user or password.');
+                } else {
+                    console.log('Success:', data);
+                    history.push('/dashboard');
+                }
+                console.log(data)
+            })
+
         console.log(formData)
     }
 
