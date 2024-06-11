@@ -15,6 +15,7 @@ import ConditionalNavigation from './components/ConditionalNavigation.jsx'
 import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
+import CampaignDetails from './components/CampaignDetails.jsx'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dmdashboard" element={<DmDashboard />} />
         <Route path="/characters" element={<Characters />} />
+        <Route path="/campaigns/:id" element={<CampaignDetails />} />
         <Route path="/logout" element={() => {
           // Handle logout logic here
         }} />
