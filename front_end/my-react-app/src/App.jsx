@@ -28,7 +28,6 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dmdashboard" element={<DmDashboard />} />
         <Route path="/charactersheet" element={<CharacterSheetTSX />} />
-        <Route path="/campaigns" element={<Campaigns />} /> {/* Ensure this component exists */}
         <Route path="/characters" element={<Characters />} />
         <Route path="/logout" element={() => {
           // Handle logout logic here
