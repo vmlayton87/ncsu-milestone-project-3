@@ -1,6 +1,6 @@
 # users table in Tome Tracker
 from sqlalchemy.inspection import inspect
-from DnD.config.database_extension import db
+from .config import db
 
 class User(db.Model):
     #set table name

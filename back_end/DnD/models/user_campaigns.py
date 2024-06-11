@@ -1,6 +1,6 @@
 # association table for user_campaigns in Tome Tracker
 
-from DnD.config.database_extension import db
+from .config import db
 
         
 user_campaigns = db.Table(
