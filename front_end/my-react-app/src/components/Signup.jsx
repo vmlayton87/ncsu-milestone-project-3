@@ -24,16 +24,26 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
-        const existingUserCheck = async() => {
-            const response = await fetch(`/users?user_name=${formData.username}`);
-            const user = await response.json();
-            return user;
+        const existingUserCheck = async () => {
+            try {
+                const response = await fetch(`/users?user_name=${formData.username}`);
+                const users = await response.json();
+                return users.length > 0; 
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                throw error; 
+            }
         }
-
+        
         const existingEmailCheck = async () => {
-            const response = await fetch(`/users?email=${formData.email}`);
-            const email = await response.json();
-            return email;
+            try {
+                const response = await fetch(`/users?email=${formData.email}`);
+                const emails = await response.json();
+                return emails.length > 0; 
+            } catch (error) {
+                console.error('Error fetching emails:', error);
+                throw error;
+            }
         }
 
         if (formData.password !== formData.confirmPassword) {
@@ -84,6 +94,7 @@ const Signup = () => {
             console.log('Error', error);
             alert('An error occurred. Please try again.');
         }
+    }
 
     return (
         <Container className="signup-page">
