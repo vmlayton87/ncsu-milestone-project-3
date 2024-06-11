@@ -10,6 +10,7 @@ class Character(db.Model):
     #set columns with data types
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # only one user per character
+    name = db.Column(db.String(100))
 
     ###NEED TO ADD ALL OTHER COLUMNS FOR CHARACTER###
     
