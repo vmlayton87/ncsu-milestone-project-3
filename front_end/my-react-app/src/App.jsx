@@ -7,13 +7,14 @@ import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-rout
 // Components import
 import './App.css'
 import SplashPage from './components/SplashPage.jsx'
-import DmCard from './components/DmCard.jsx'
 import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import Dashboard from './components/Dashboard.jsx'
 import ConditionalNavigation from './components/ConditionalNavigation.jsx'
 import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
+import CharacterSheet from './components/CharacterSheet.jsx'
+import CharacterSheetTSX from './components/CharacterSheet.tsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
 import CampaignDetails from './components/CampaignDetails.jsx'
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dmdashboard" element={<DmDashboard />} />
+        <Route path="/charactersheet" element={<CharacterSheetTSX />} />
         <Route path="/characters" element={<Characters />} />
         <Route path="/campaigns/:id" element={<CampaignDetails />} />
         <Route path="/logout" element={() => {
