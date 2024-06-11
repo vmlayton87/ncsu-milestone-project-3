@@ -41,8 +41,8 @@ def get_users():
 def new_user():
     try:
         data = request.get_json() #get_json gets the json request.
-        hashed_password = bcrypt.generate_password_hash(data['hash'], 12)#hashes the password at back end
-        new_user = User(user_name = data['user_name'], email = data['email'], hashed_password = hashed_password) #creates a new user
+        hashed_password = bcrypt.generate_password_hash(data['password'], 12)#hashes the password at back end
+        new_user = User(user_name = data['username'], email = data['email'], hashed_password = hashed_password) #creates a new user
         # new_user = User(**data)  # the ** unpacks the dictionary data and passes its key value pairs as arguments 
         db.session.add(new_user)
         db.session.commit()

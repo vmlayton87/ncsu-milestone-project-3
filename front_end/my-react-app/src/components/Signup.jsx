@@ -3,7 +3,6 @@ import { useState } from "react";
 import useHistory from "react-router-dom";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
-import bcrypt from 'bcryptjs';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -29,39 +28,27 @@ const Signup = () => {
         if (formData.password !== formData.confirmPassword) {
             alert('Password and Confirm Password are not the same!');
         } else {
-            //Generate salt and hash
-            bcrypt.genSalt(12, function(err, salt) {
-                bcrypt.hash(formData.password, salt, function(err, hash) {
-                    if (err){
-                        console.log("error", err)
-                    } else {
-                        // Store hash and other data in the user table.
-                        const userData = {
-                            user_name: formData.username,
-                            email: formData.email,
-                            hash: hash
-                        }
+            const userData = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password
+            }
 
-                        fetch ('/users',{
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(userData)
-                        })
-                        .then(response => response.json())  
-                        .then(data => {
-                            console.log('success', data);
-                            history.push('/login');
-                        })
-                        .catch((error)=> console.log('Error', error));
-                    }
-                });
-            });
+            fetch ('/users',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())  
+            .then(data => {
+                console.log('success', data);
+                history.push('/login');
+            })
+            .catch((error)=> console.log('Error', error));
+          }
         }
-        //delete the console log after testing
-        console.log(formData)
-    }
 
     return (
         <Container className="signup-page">
