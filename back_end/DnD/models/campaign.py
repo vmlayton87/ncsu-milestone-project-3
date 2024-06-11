@@ -9,12 +9,16 @@ class Campaign(db.Model):
     #set columns with data types
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(250))
-    dm = db.Column(db.Integer, db.ForeignKey('users.id'))
+    dm = db.Column(db.Integer, db.ForeignKey('users.id')) # only one DM per campaign.
     
     
-    #define relationship to Note
-    users = db.relationship('User', secondary = 'user_campaigns', back_populates = 'campaigns')
-    characters = db.relationship('Character', secondary = 'character_campaigns', back_populates = 'campaigns')
+    # many-to-many relationship for user_campaigns. this creates a bidirectional relationship.
+    users = db.relationship('User', secondary = 'user_campaigns', back_populates = 'campaigns', lazy='dynamic')
+
+    # many-to-many relationship for character_campaigns. this creates a bidirectional relationship. 
+    characters = db.relationship('Character', secondary = 'character_campaigns', back_populates = 'campaigns', lazy='dynamic')
+
+    # one-to-many relationship with notes.
     notes = db.relationship('Note', back_populates = 'campaign')
 
     # uses the inspect module to get the column attributes, then it creates a dictionary of those key value pairs. inpsect is a module that allows you to get the attributes of an object in python. This does work as intended. 

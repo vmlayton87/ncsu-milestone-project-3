@@ -12,8 +12,8 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250))
     text = db.Column(db.TEXT)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    campaign_id = db.Column(db.Integer, db.ForeignKey('campaigns.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # one user per note
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaigns.id')) # one campaign per note
     
     #define relationships
     user = db.relationship('User', back_populates = 'notes')

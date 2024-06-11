@@ -8,14 +8,22 @@ class User(db.Model):
     
     #set columns with data types
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(250))
-    hashed_password = db.Column(db.String(250))
+    usename = db.Column(db.String(250))
+    password = db.Column(db.String(250))
     
-    #define relationship to Note
+    #DEFINE RELATIONSHIPS
+    # one-to-many relationship with notes and characters: one user can have many notes, and one user can have many characters
     notes = db.relationship('Note', back_populates = 'user')
     characters = db.relationship('Character', back_populates = 'user')
-    campaigns = db.relationship('Campaign', secondary= 'user_campaigns', back_populates = 'users')
 
+    # many-to-many relationship with campaigns: one user can be in many campaigns, and one campaign can have many users
+    campaigns = db.relationship('Campaign', secondary= 'user_campaigns', back_populates = 'users', lazy='dynamic')
+
+    # uses the inspect module to get the column attributes, then it creates a dictionary of those key value pairs. inpsect is a module that allows you to get the attributes of an object in python. This does work as intended. 
+    def to_dict(self):
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+
+        
     #create a method to convert to dictionary for json that explicitly states each key value pair
     # def to_dict(self):
     #         return {
@@ -27,8 +35,6 @@ class User(db.Model):
     # def to_dict(self):
     #     return {key: value for key, value in self.__dict__.items() if not key.startswith('_')}
     
-    # uses the inspect module to get the column attributes, then it creates a dictionary of those key value pairs. inpsect is a module that allows you to get the attributes of an object in python. This does work as intended. 
-    def to_dict(self):
-        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+    
     
   
