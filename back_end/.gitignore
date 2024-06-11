@@ -1,3 +1,5 @@
 .env
 Note.txt
 venv
+migrations
+__pycache__
