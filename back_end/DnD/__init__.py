@@ -10,11 +10,14 @@ from flask_sqlalchemy import SQLAlchemy
 #import JWT library
 from flask_jwt_extended import JWTManager
 
+#Import CORS
+from flask_cors import CORS
+
 # Initialize SQLAlchemy
 db = SQLAlchemy()
 
-# Initialize JWT
-jwt = JWTManager()
+#Import secrets module
+import secrets
 
 #import blueprint registration function
 from .blueprints import register_blueprints
@@ -28,10 +31,16 @@ def create_app():
     jwt_secret_key = os.getenv('JWT_SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = sql_password
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['JWT_SECRET_KEY'] = jwt_secret_key
+    app.config['JWT_SECRET_KEY'] = secrets.token_hex(32)
 
     # Initialize database
     db.init_app(app)
+
+    #Enable CORS
+    CORS(app)
+
+    # Initialize JWT
+    jwt = JWTManager(app)
 
     # Import and configure Flask-Migrate
     from flask_migrate import Migrate

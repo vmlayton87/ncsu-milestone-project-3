@@ -18,27 +18,32 @@ const Login = () => {
     }
 
     const navigate = useNavigate();
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
-        fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error){
-                    console.log('Error: ', data.error);
-                    alert('Incalid user or password.');
-                } else {
-                    console.log('Success:', data);
-                    navigate('/dashboard');
-                }
-                console.log(data)
-            })
+        try {
+            const response = await fetch('http://127.0.0.1:5000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            
+            if (data.error){
+                console.log('Error: ', data.error);
+                alert('Error:', data.error);
+            } else {
+                console.log('Success: Login successfully');
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            alert('Error: ', error);
+            console.log('Error:', error);
+        }
+       
     }
 
     return (

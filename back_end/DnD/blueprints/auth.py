@@ -36,7 +36,7 @@ def register():
         return jsonify({'error': 'Email already exists'}), 400
       
       #hash the password
-      hashed_password = bcrypt.generate_password_hash(data['password'], 12)
+      hashed_password = bcrypt.generate_password_hash(data['password'], 12).decode('utf-8')
 
       #create new user
       new_user = User(user_name=data['username'], email=data['email'], hashed_password=hashed_password)

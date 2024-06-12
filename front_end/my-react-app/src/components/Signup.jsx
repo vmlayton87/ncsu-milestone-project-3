@@ -26,7 +26,7 @@ const Signup = () => {
         // Handle form submission, validation, and API call here
         const existingUserCheck = async () => {
             try {
-                const response = await fetch(`/users?user_name=${formData.username}`);
+                const response = await fetch(`http://127.0.0.1:5000/users?user_name=${formData.username}`);
                 const users = await response.json();
                 return users.length > 0; 
             } catch (error) {
@@ -37,7 +37,7 @@ const Signup = () => {
         
         const existingEmailCheck = async () => {
             try {
-                const response = await fetch(`/users?email=${formData.email}`);
+                const response = await fetch(`http://127.0.0.1:5000/users?email=${formData.email}`);
                 const emails = await response.json();
                 return emails.length > 0; 
             } catch (error) {
@@ -72,7 +72,7 @@ const Signup = () => {
                 password: formData.password
             }
 
-            const response = await fetch ('/auth/register',{
+            const response = await fetch ('http://127.0.0.1:5000/auth/register',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
