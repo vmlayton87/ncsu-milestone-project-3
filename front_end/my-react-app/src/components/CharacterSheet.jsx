@@ -54,4 +54,4 @@ const CharacterSheetApp = (props) => {
   }
 }
 
-export default CharacterSheetApp;
+export default CharacterSheet;

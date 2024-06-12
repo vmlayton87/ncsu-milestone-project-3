@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import CharacterSheet from "./CharacterSheet.tsx";
+import CharacterSheet from "./CharacterSheet.jsx";
 import '../index.scss';
 
 const CampaignDetails = () => {
