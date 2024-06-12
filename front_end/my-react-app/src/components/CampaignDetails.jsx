@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-// import CharacterSheet from "./CharacterSheet"; // **UNCOMMENT WHEN COMPONENT IS CREATED**
+import CharacterSheet from "./CharacterSheet.tsx";
 import '../index.scss';
 
 const CampaignDetails = () => {
@@ -79,8 +79,7 @@ const CampaignDetails = () => {
             <h2>{campaign.name}</h2>
             <p>{campaign.description}</p>
             <div className="details-container">
-                <h2>Character Sheet Dummy Text</h2>
-                {/* <CharacterSheet character={campaign.characterSheet} /> **UNCOMMENT THIS WHEN COMPONENT IS BUILT AND IMPORTED** */}
+                <CharacterSheet />
                 <div className="notes-section">
                     <h3>Notes</h3>
                     <textarea
