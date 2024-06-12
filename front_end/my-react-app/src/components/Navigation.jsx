@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import '../index.scss';
 
@@ -7,11 +7,15 @@ import '../index.scss';
 
 const Navigation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
     navigate('/');
   }
+
+   // Condition to hide logout link on specific paths
+   const showLogout = !['/login', '/signup'].includes(location.pathname);
 
     return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -23,7 +27,7 @@ const Navigation = () => {
                 <Nav.Link href="/characters">Characters</Nav.Link>
             </Nav>
             <Nav className="ms-auto">
-                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                {showLogout && <Nav.Link onClick={handleLogout}>Logout</Nav.Link>}
             </Nav>
         </Navbar.Collapse>
       </Container>
