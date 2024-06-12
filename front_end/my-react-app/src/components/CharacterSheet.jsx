@@ -1,10 +1,11 @@
 import React, { Component, useState, useEffect } from 'react'
 import { DnDCharacterStatsSheet, DnDCharacter } from 'dnd-character-sheets'
 import 'dnd-character-sheets/dist/index.css'
+import Gideon from "../testCharacters/gideon.json"
 
 class CharacterSheet extends Component {
   render() {
-    return <DnDCharacterStatsSheet />
+    return <DnDCharacterStatsSheet character={Gideon}/>
   }
 }
 
