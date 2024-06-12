@@ -15,6 +15,7 @@ import ConditionalNavigation from './components/ConditionalNavigation.jsx'
 import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
+import CampaignDetails from './components/CampaignDetails.jsx'
 import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute.jsx'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/dmdashboard" element={<ProtectedRoute><DmDashboard /></ProtectedRoute>} />
         <Route path="/characters" element={<ProtectedRoute><Characters /></ProtectedRoute>} />
+        <Route path="/campaigns/:id" element={<ProtectedRoute> <CampaignDetails /> </ProtectedRoute>} />
         <Route path="/logout" element={() => {
           // Handle logout logic here
           // Task completed:Logout logic was handled in the Navigation component.
