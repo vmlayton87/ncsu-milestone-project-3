@@ -36,6 +36,7 @@ const Login = () => {
                 console.log('Error: ', data.error);
                 alert('Error:', data.error);
             } else {
+                localStorage.setItem('jwt_token', data.access_token);
                 console.log('Success: Login successfully');
                 navigate('/dashboard');
             }

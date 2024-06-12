@@ -4,6 +4,9 @@ from flask import Blueprint, jsonify, request
 #import JWT library
 from flask_jwt_extended import create_access_token
 
+#Import datetime
+from datetime import datetime, timedelta, timezone
+
 # import the model for this blueprint
 from ..models.user import User
 
@@ -58,7 +61,9 @@ def login():
     data = request.get_json()
     user = User.query.filter_by(user_name=data['username']).first()
     if user and bcrypt.check_password_hash(user.hashed_password, data['password']):
-        access_token = create_access_token(identity={'userId': user.id, 'username': user.user_name, 'email': user.email})
+        # Set the expiration time to 7 days from the current time
+        expires = timedelta(hours=24*7)
+        access_token = create_access_token(identity={'userId': user.id, 'username': user.user_name, 'email': user.email}, expires_delta= expires)
         return jsonify({'access_token': access_token})
     else:
         return jsonify({'message': 'Invalid credentials'}), 401
