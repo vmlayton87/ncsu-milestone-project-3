@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 
 #Import datetime
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 # import the model for this blueprint
 from ..models.user import User

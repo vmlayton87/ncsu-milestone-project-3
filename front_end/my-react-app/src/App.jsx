@@ -1,7 +1,7 @@
 // Dependencies import
 import React from 'react'
 import { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom'
 
 
 // Components import
@@ -15,10 +15,10 @@ import ConditionalNavigation from './components/ConditionalNavigation.jsx'
 import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
-import { ProtectedRoute, PublicRoute } from './components/protectedRoute.jsx'
+import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute.jsx'
 
 function App() {
-  return (
+    return (
     <Router>
       <ConditionalNavigation />
       <Routes>
@@ -30,6 +30,7 @@ function App() {
         <Route path="/characters" element={<ProtectedRoute><Characters /></ProtectedRoute>} />
         <Route path="/logout" element={() => {
           // Handle logout logic here
+          // Task completed:Logout logic was handled in the Navigation component.
         }} />
       </Routes>
       {location.pathname !=='/' && <DiceDrawer />}

@@ -28,7 +28,6 @@ def create_app():
     
     #config sql database(need to create a database in postgres first)
     sql_password = os.getenv('SQL_PASSWORD')
-    jwt_secret_key = os.getenv('JWT_SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = sql_password
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = secrets.token_hex(32)
