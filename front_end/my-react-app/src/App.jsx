@@ -17,6 +17,7 @@ import DmDashboard from './components/DmDashboard.jsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
 import CampaignDetails from './components/CampaignDetails.jsx'
 import CharacterSheet from './components/CharacterSheet.jsx'
+import NewCampaign from './components/NewCampaign.jsx'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/campaigns/new" element={<NewCampaign />} />
         <Route path="/dmdashboard" element={<DmDashboard />} />
         <Route path="/characters" element={<Characters />} />
         <Route path="/campaigns/:id" element={<CampaignDetails />} />
