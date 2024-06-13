@@ -50,7 +50,7 @@ def get_camps():
         user = User.query.get(user_id)
         # get the campaigns
         campaigns = user.campaigns
-
+        print('checking campaigns: ', campaigns)
         # return the campaigns as a json object
         return jsonify([camp.to_dict() for camp in campaigns])
 
