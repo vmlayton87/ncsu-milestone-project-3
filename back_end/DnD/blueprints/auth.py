@@ -5,10 +5,10 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 
 # import the model for this blueprint
-from ..models.user import User
+from ..models import User
 
 # import database
-from .. import db
+from ..config import db
 
 #import flask_bcrypt
 from flask_bcrypt import Bcrypt

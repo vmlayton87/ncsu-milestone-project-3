@@ -9,8 +9,8 @@ class User(db.Model):
     #set columns with data types
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(250))
-    username = db.Column(db.String(250))
-    password = db.Column(db.String(250))
+    user_name = db.Column(db.String(250))
+    hashed_password = db.Column(db.String(250))
     
     #DEFINE RELATIONSHIPS
     # one-to-many relationship with notes and characters: one user can have many notes, and one user can have many characters
