@@ -15,7 +15,7 @@ const Navigation = () => {
                 <Nav.Link href="/characters">Characters</Nav.Link>
             </Nav>
             <Nav className="ms-auto">
-                <Nav.Link href="/login">Logout</Nav.Link>
+                <Nav.Link href="/logout">Logout</Nav.Link>
             </Nav>
         </Navbar.Collapse>
       </Container>
