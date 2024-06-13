@@ -1,11 +1,23 @@
 import React from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import '../index.scss';
 
 // Credit for navbar toggle and collapse: https://stackoverflow.com/questions/20855483/how-navbar-toggle-collapse-navbar-collapse-classes-work-together
 
 const Navigation = () => {
-  return (
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwt_token');
+    navigate('/');
+  }
+
+   // Condition to hide logout link on specific paths
+   const showLogout = !['/login', '/signup'].includes(location.pathname);
+
+    return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -15,7 +27,7 @@ const Navigation = () => {
                 <Nav.Link href="/characters">Characters</Nav.Link>
             </Nav>
             <Nav className="ms-auto">
-                <Nav.Link href="/login">Logout</Nav.Link>
+                {showLogout && <Nav.Link onClick={handleLogout}>Logout</Nav.Link>}
             </Nav>
         </Navbar.Collapse>
       </Container>
