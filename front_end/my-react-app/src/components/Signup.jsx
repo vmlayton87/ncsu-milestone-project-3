@@ -23,28 +23,6 @@ const Signup = () => {
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission, validation, and API call here
-        const existingUserCheck = async () => {
-            try {
-                const response = await fetch(`http://127.0.0.1:5000/users?user_name=${formData.username}`);
-                const users = await response.json();
-                return users.length > 0; 
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                throw error; 
-            }
-        }
-        
-        const existingEmailCheck = async () => {
-            try {
-                const response = await fetch(`http://127.0.0.1:5000/users?email=${formData.email}`);
-                const emails = await response.json();
-                return emails.length > 0; 
-            } catch (error) {
-                console.error('Error fetching emails:', error);
-                throw error;
-            }
-        }
 
         if (formData.password !== formData.confirmPassword) {
             alert('Password and Confirm Password are not the same!');
@@ -52,19 +30,6 @@ const Signup = () => {
         } 
         
         try {
-
-            const usernameExists = await existingUserCheck();
-            const emailExists = await existingEmailCheck();
-
-            if (usernameExists) {
-                alert('User already exists!');
-                return;
-            }
-
-            if (emailExists) {
-                alert('Email already exists!');
-                return;
-            }
 
             const userData = {
                 username: formData.username,
