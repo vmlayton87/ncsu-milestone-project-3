@@ -47,6 +47,7 @@ const Dashboard = () => {
                         <CampaignCard key={campaign.id} campaign={campaign} />
                     ))}
                 </Row>
+                    <button class= "btn btn-secondary" href="/campaigns/new">Start a new adventure!</button>
             </Container>
         </div>
     )
