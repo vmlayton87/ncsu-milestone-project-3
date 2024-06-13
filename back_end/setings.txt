@@ -10,6 +10,8 @@ install python dotenv
     pip install python-dotenv
 install Flask Migrate
     pip install Flask-Migrate
+install Flask-JWT-Extended
+    pip install Flask-JWT-Extended
 then run flask:
     flask run --reload
 close flask 
