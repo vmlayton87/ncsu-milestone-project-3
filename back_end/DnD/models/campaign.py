@@ -16,10 +16,10 @@ class Campaign(db.Model):
     
     
     # many-to-many relationship for user_campaigns. this creates a bidirectional relationship.
-    users = db.relationship('User', secondary = 'user_campaigns', back_populates = 'campaigns', lazy='dynamic')
+    users = db.relationship('UserCampaigns', back_populates = 'campaigns', lazy='dynamic')
 
     # many-to-many relationship for character_campaigns. this creates a bidirectional relationship. 
-    characters = db.relationship('Character', secondary = 'character_campaigns', back_populates = 'campaigns', lazy='dynamic')
+    characters = db.relationship('CharacterCampaigns', back_populates = 'campaigns', lazy='dynamic')
 
     # one-to-many relationship with notes.
     notes = db.relationship('Note', back_populates = 'campaign')

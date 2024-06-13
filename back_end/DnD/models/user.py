@@ -18,7 +18,7 @@ class User(db.Model):
     characters = db.relationship('Character', back_populates = 'user')
 
     # many-to-many relationship with campaigns: one user can be in many campaigns, and one campaign can have many users
-    campaigns = db.relationship('Campaign', secondary= 'user_campaigns', back_populates = 'users', lazy='dynamic')
+    campaigns = db.relationship('UserCampaigns', back_populates = 'user', lazy='dynamic')
 
     # uses the inspect module to get the column attributes, then it creates a dictionary of those key value pairs. inpsect is a module that allows you to get the attributes of an object in python. This does work as intended. 
     def to_dict(self):

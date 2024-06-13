@@ -204,7 +204,7 @@ class Character(db.Model):
     user = db.relationship('User', back_populates = 'characters')
 
     # association relationship for character_campaigns. this allows for bidirectional relationships between character and campaign.
-    campaigns = db.relationship('Campaign', secondary = 'character_campaigns', back_populates = 'characters', lazy='dynamic')
+    campaigns = db.relationship('CharacterCampaigns', back_populates = 'characters', lazy='dynamic')
 
     # uses the inspect module to get the column attributes, then it creates a dictionary of those key value pairs. inpsect is a module that allows you to get the attributes of an object in python. This does work as intended. 
     def to_dict(self):
