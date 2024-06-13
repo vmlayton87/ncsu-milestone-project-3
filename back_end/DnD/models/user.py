@@ -14,16 +14,20 @@ class User(db.Model):
     
     #DEFINE RELATIONSHIPS
     # one-to-many relationship with notes and characters: one user can have many notes, and one user can have many characters
-    notes = db.relationship('Note', back_populates = 'user')
-    characters = db.relationship('Character', back_populates = 'user')
+    notes = db.relationship('Note', back_populates = 'user', cascade='all, delete-orphan', lazy='dynamic')
+    # db.relationship: characters attribute is a list of characters associated with the user
+    characters = db.relationship('Character', back_populates = 'user', cascade='all, delete-orphan', lazy='dynamic')
 
     # many-to-many relationship with campaigns: one user can be in many campaigns, and one campaign can have many users
-    campaigns = db.relationship('UserCampaigns', back_populates = 'user', lazy='dynamic')
+    campaigns = db.relationship('UserCampaigns', back_populates = 'user', cascade='all, delete-orphan', lazy='dynamic')
 
     # uses the inspect module to get the column attributes, then it creates a dictionary of those key value pairs. inpsect is a module that allows you to get the attributes of an object in python. This does work as intended. 
     def to_dict(self):
-        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
-
+        data = {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+        # data['notes'] = [note.to_dict() for note in self.notes]
+        # data['characters'] = [char.to_dict() for char in self.characters]
+        # data['campaigns'] = [user_campaign.campaign.to_dict() for user_campaign in self.campaigns]
+        return data
         
     #create a method to convert to dictionary for json that explicitly states each key value pair
     # def to_dict(self):

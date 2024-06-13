@@ -1,9 +1,9 @@
 # blueprint/routes for the note table
 from flask import Blueprint, jsonify, request
-
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # import the model for this blueprint
-from ..models import Campaign
+from ..models import Campaign, User
 
 # import database
 from ..config import db
@@ -13,6 +13,44 @@ campaign_bp = Blueprint('campaign', __name__, url_prefix='/campaigns')
 
 # ROUTES
 # try except is like try catch, Exception is all the errors, the as a variable helps to do something with the error.
+
+# logged in, gets one campaign, and the character for that campaign
+@campaign_bp.route('/<int:campaign_id>/characters', methods=['GET'])
+@jwt_required()
+def get_characters(campaign_id):
+    try:
+        user_id = get_jwt_identity()['userId']
+        user = User.query.get(user_id)
+
+        campaign = Campaign.query.get(campaign_id)
+        # itierates through the results object, then gets the attributes and puts them in a list using a method defined in the model
+        characters = [char.to_dict() for char in campaign.characters]
+        return jsonify(characters)
+    except Exception as err:
+        print(f"Error: {err}")
+        return jsonify({'error': 'Failed to retrieve characters'}), 500
+
+# logged in, gets one campaign, and creates a character
+@campaign_bp.route('/<int:campaign_id>/characters', methods=['POST'])
+@jwt_required()
+def create_character(campaign_id):
+    try:
+        data = request.get_json() #get_json gets the json request.
+        user_id = get_jwt_identity()['userId']
+        user = User.query.get(user_id)
+
+        campaign = Campaign.query.get(campaign_id)
+        new_char = Character(**data)
+
+        campaign.characters.append(new_char)
+
+        db.session.add(new_char)
+        db.session.commit()
+
+        return jsonify(new_char.to_dict())
+    except Exception as err:
+        print(f"Error: {err}")
+        return jsonify({'error': 'Failed to create character'}), 500
 
 # GET route
 @campaign_bp.route('/', methods=['GET'])

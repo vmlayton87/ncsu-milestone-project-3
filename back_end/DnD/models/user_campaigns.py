@@ -8,11 +8,13 @@ class UserCampaigns(db.Model):
     __tablename__ = 'user_campaigns'
 
     # define columns/attributes
-    user_id = db.Column('user_id', db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), primary_key=True),
-    campaign_id = db.Column('campaign_id', db.Integer, db.ForeignKey('campaigns.id', ondelete='CASCADE'), primary_key=True)
+    user_id = db.Column( db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaigns.id', ondelete='CASCADE'), primary_key=True)
 
     # define relationships
     user = db.relationship('User', back_populates = 'campaigns')
+    
     campaign = db.relationship('Campaign', back_populates = 'users')
 
     # define method for data conversion to a dictionary
