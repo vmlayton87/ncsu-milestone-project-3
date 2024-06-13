@@ -16,7 +16,7 @@ const DiceRoller = () => {
 
   return (
     <div className="dice-roller">
-      <h2>Dice Roller</h2>
+      <h2>Dice Drawer</h2>
       <div className="dice-buttons">
         <div className="dice-container">
           <span className="dice-label">d4</span>
