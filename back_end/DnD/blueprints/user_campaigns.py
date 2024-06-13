@@ -64,19 +64,26 @@ def get_camps():
         return jsonify({'error': 'Failed to retrieve campaigns'}), 500
 
 # join a campaign
-@usercamp_bp.route('/<int:campaign_id>', methods=['PUT'])
+@usercamp_bp.route('/join', methods=['PUT'])
 @jwt_required()
 def join_camp(campaign_id):
     
     try:
         data = request.get_json()
-        campaign = Campaign.query.get(campaign_id)
-        # query the campaign by id, see if the data.password matches the campagn.password
+        campaign_id = data.get('campaign_id')
+        password = data.get('password')
+
         user_id = get_jwt_identity()['userId']
         user = User.query.get(user_id)
-        if data.password == campaign.password:
-            campaign.users.append(user)
+
+        
+        campaign = Campaign.query.get(campaign_id)
+
+        if campaign.password == password:
+            user.campaigns.append(campaign)
+
             user_campaign = UserCampaigns(user_id=user_id, campaign_id=new_camp.id, user=user, campaign=new_camp)
+            db.session.commit()
             return jsonify(campaign.to_dict())
         else:
             return jsonify({'error': 'Incorrect password'}), 400
