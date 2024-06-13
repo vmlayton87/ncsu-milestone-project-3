@@ -6,6 +6,8 @@ import '../index.scss';
 const NewCampaign = () => {
     const [formData, setFormData] = useState({
         campaignname: '',
+        password: '',
+        confirmpassword: '',
         campaigndescription: ''
     })
 // function to update state with user info
@@ -35,6 +37,28 @@ const NewCampaign = () => {
                                 type="text"
                                 name="campaignname"
                                 value={formData.campaignname}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="password">
+                            <Form.Label className="form-label">Campaign Password</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="campaignpassword"
+                                value={formData.campaignpassword}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="confirmPassword">
+                            <Form.Label className="form-label">Confirm Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
                                 onChange={handleChange}
                                 required
                             />
