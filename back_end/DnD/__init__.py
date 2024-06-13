@@ -3,6 +3,8 @@
 
 from flask import Flask 
 from flask_jwt_extended import JWTManager
+from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 from .config import DatabaseConfig, db, migrate, JWTConfig
 
 from .blueprints import register_blueprints
@@ -14,14 +16,14 @@ def create_app():
 
     # load configuration settings for the database
     app.config.from_object(DatabaseConfig)
-    app.config.from_object(jwt) 
+    app.config.from_object(JWTConfig) 
     
     # initialize the database with the application
     db.init_app(app)
     
     #Enable CORS
     CORS(app)
-
+    bcrypt = Bcrypt(app)
     # Initialize JWT
     jwt = JWTManager(app)
 

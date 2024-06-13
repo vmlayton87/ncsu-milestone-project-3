@@ -1,11 +1,12 @@
 # blueprint/routes for the note table
 from flask import Blueprint, jsonify, request
 
+
 # import the model for this blueprint
-from DnD.models import Campaign
+from ..models import Campaign
 
 # import database
-from DnD.config.database_extension import db
+from ..config import db
 
 # initialize the blueprint named notes
 campaign_bp = Blueprint('campaign', __name__, url_prefix='/campaigns')
@@ -37,6 +38,8 @@ def get_user(campaign_id):
     except Exception as err:
         print(f"Error: {err}")
         return jsonify({'error': 'Failed to retrieve campaign'}), 500
+
+
 
 # POST route
 @campaign_bp.route('/', methods=['POST'])

@@ -1,6 +1,6 @@
 # assiciation table fo character_campaigns in Tome Tracker
 
-from DnD.config.database_extension import db
+from ..config import db
 
 character_campaigns = db.Table(
     'character_campaigns',

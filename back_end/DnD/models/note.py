@@ -1,6 +1,6 @@
 # notes table in Tome Tracker
 from sqlalchemy.inspection import inspect
-from .config import db
+from ..config import db
 
 
 #Create a 'Note' Class

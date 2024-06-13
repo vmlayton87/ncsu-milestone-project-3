@@ -12,6 +12,10 @@ install Flask Migrate
     pip install Flask-Migrate
 install Flask-JWT-Extended
     pip install Flask-JWT-Extended
+install flask Cors
+    pip install Flask-Cors
+install flask bcrypt
+    pip install Flask-Bcrypt
 then run flask:
     flask run --reload
 close flask 

@@ -1,6 +1,6 @@
 # characters table in Tome Tracker
 
-from .config import db
+from ..config import db
 
 #Create a 'Fact' Class
 class Character(db.Model):

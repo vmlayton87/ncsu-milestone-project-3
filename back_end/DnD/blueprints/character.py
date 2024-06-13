@@ -2,10 +2,10 @@
 from flask import Blueprint, jsonify, request
 
 # import the model for this blueprint
-from DnD.models import Character
+from ..models import Character
 
 # import database
-from DnD.config.database_extension import db
+from ..config import db
 
 # initialize the blueprint named notes
 char_bp = Blueprint('character', __name__, url_prefix='/chars')
