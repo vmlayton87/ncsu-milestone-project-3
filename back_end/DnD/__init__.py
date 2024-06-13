@@ -2,7 +2,7 @@
 # This file initializes the Flask app and registers the blueprints and extensions.
 
 from flask import Flask 
-from .config import DatabaseConfig, db, migrate, jwt
+from .config import DatabaseConfig, db, migrate, jwt, JWTConfig
 
 from .blueprints import register_blueprints
 
@@ -12,7 +12,8 @@ def create_app():
     app = Flask(__name__)
 
     # load configuration settings for the database
-    app.config.from_object(DatabaseConfig) 
+    app.config.from_object(DatabaseConfig)
+    app.config.from_object(jwt) 
     
     # initialize the database with the application
     db.init_app(app)
