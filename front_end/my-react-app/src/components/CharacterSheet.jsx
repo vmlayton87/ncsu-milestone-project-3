@@ -53,6 +53,11 @@ const CharacterSheetApp = (props) => {
       window.alert('Json file does not contain a DnD character.')
     }
   }
+  return (
+    <div className="character-sheet-container">
+      {statsSheet}
+    </div>
+  );
 }
 
 export default CharacterSheet;

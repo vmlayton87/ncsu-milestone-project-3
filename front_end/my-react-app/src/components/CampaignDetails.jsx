@@ -59,7 +59,8 @@ const CampaignDetails = () => {
         health: 30,
         armorClass: 15,
         speed: 30,
-        passivePerception: 12
+        passivePerception: 12,
+        image: 'path/to/image1.jpg' // Replace with actual image URL from the database. A default background color renders if no image is provided.
       },
       {
         id: 2,
@@ -69,7 +70,8 @@ const CampaignDetails = () => {
         health: 25,
         armorClass: 14,
         speed: 35,
-        passivePerception: 15
+        passivePerception: 15,
+        image: 'path/to/image2.jpg' // Need to replace this image url as well.
       }
     ];
   };
@@ -83,6 +85,7 @@ const CampaignDetails = () => {
       armorClass: 13,
       speed: 30,
       passivePerception: 14,
+      image: null, // No image available
       notes: [
         'Note 1: Do NOT trust the innkeeper.',
         'Note 2: The bed was lumpy, -1 to saving throws.',
@@ -136,14 +139,28 @@ const CampaignDetails = () => {
               {characters.map((character) => (
                 <div
                   key={character.id}
-                  className="character-snapshot"
+                  className="character-snapshot card"
                   onClick={() => handleCharacterClick(character.id)}
+                  style={{ backgroundImage: character.image ? `url(${character.image})` : 'none' }}
                 >
-                  <h4>{character.name}</h4>
-                  <p>Health: {character.health}</p>
-                  <p>Armor Class: {character.armorClass}</p>
-                  <p>Speed: {character.speed}</p>
-                  <p>Passive Perception: {character.passivePerception}</p>
+                  {!character.image && (
+                    <div className="placeholder">
+                      <h4 className="card-title">{character.name}</h4>
+                      <p className="card-text">Health: {character.health}</p>
+                      <p className="card-text">Armor Class: {character.armorClass}</p>
+                      <p className="card-text">Speed: {character.speed}</p>
+                      <p className="card-text">Passive Perception: {character.passivePerception}</p>
+                    </div>
+                  )}
+                  {character.image && (
+                    <div className="card-body">
+                      <h4 className="card-title">{character.name}</h4>
+                      <p className="card-text">Health: {character.health}</p>
+                      <p className="card-text">Armor Class: {character.armorClass}</p>
+                      <p className="card-text">Speed: {character.speed}</p>
+                      <p className="card-text">Passive Perception: {character.passivePerception}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -186,11 +203,10 @@ const CampaignDetails = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default CampaignDetails;
-
 
 
 // Placeholder character sheet data:

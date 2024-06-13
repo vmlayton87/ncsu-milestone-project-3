@@ -16,6 +16,7 @@ import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
 import CampaignDetails from './components/CampaignDetails.jsx'
+import CharacterSheet from './components/CharacterSheet.jsx'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/dmdashboard" element={<DmDashboard />} />
         <Route path="/characters" element={<Characters />} />
         <Route path="/campaigns/:id" element={<CampaignDetails />} />
+        <Route path="/character/:id" element={<CharacterSheet />} />
         <Route path="/logout" element={() => {
           // Handle logout logic here
         }} />
