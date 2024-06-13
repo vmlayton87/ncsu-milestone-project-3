@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React , { useEffect, useState }from "react";
 import { Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
 import Navigation from "./Navigation";
@@ -10,6 +10,33 @@ import image2 from '../assets/cardimage-2.jpg'
 import image3 from '../assets/cardimage-3.jpg'
 
 const Dashboard = () => {
+    /****   Testing Code for fetching campaigns  getting a CORS error. ****/ 
+    // const [campaigns, setCampaigns] = useState([]);
+
+    // useEffect(() => {
+    //     const fetchCampaigns = async () => {
+    //       try {
+    //         const token = localStorage.getItem('access_token');  // Assuming token is stored in local storage
+    //         const response = await fetch('http://127.0.0.1:5000/usercamp', {
+    //           method: 'GET',
+    //           headers: {
+    //             'Authorization': `Bearer ${token}`
+    //           }
+    //         });
+    //         console.log(response)
+    //         if (!response.ok) {
+    //           throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         const data = await response.json;
+    //         setCampaigns(data);
+    //       } catch (error) {
+    //         console.error('Error fetching campaigns:', error);
+    //       }
+    //     };
+    
+    //     fetchCampaigns();
+    //   }, []);
+    
 
     const campaigns = [
         { 
