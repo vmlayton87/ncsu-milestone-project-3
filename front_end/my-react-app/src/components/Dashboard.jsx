@@ -31,7 +31,7 @@ const Dashboard = () => {
                 'Content-Type': 'application/json'
               }
             });
-            console.log('Response:',response)
+            // console.log('Response:',response)
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -133,7 +133,7 @@ const Dashboard = () => {
     
     
     const handleNewCampaignClick = () => {
-        navigate("/userCampaigns/new");
+        navigate("/Campaigns/new");
     }
 
     return (

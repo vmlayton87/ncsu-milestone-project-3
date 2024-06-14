@@ -29,7 +29,7 @@ function App() {
         <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/campaigns/new" element={<NewCampaign />} />
+        <Route path="/campaigns/new" element={<ProtectedRoute> <NewCampaign /> </ProtectedRoute>} />
         <Route path="/dmdashboard" element={<ProtectedRoute><DmDashboard /></ProtectedRoute>} />
         <Route path="/characters" element={<ProtectedRoute><Characters /></ProtectedRoute>} />
         <Route path="/campaigns/:id" element={<ProtectedRoute> <CampaignDetails /> </ProtectedRoute>} />
