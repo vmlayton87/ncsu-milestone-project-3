@@ -93,16 +93,42 @@ const Dashboard = () => {
 
     const [selectedOption, setSelectedOption] = useState('');
     const [textAreaVisible, setTextAreaVisible] = useState(false);
+    const [password, setPassword] = useState('');
 
-    const handleSelectChange = (event) => {
+    const handleSelectChange =  (event) => {
+        
         setSelectedOption(event.target.value);
         setTextAreaVisible(true);
+        console.log('selected option:', selectedOption);
     };
 
-    const handleJoinSubmit = (event) => {
+    const handleJoinSubmit = async (event) => {
+        console.log('selected option in submit:', selectedOption);
+        console.log('password in submit:', password);
         event.preventDefault();
         // Handle the form submission
-        console.log('Selected Option:', selectedOption);
+        try {
+            const token = getToken(); 
+            const response = await fetch('http://127.0.0.1:5000/usercamp/join', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({campaign_id: selectedOption, password: password})
+            });
+
+
+            console.log('Response:',response)
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+
+            }
+            window.location.reload()
+          } catch (error) {
+            console.error('Error joining campaign:', error);
+          }
+        console.log('Selected Option after join:', selectedOption);
     };
     
     
@@ -128,9 +154,10 @@ const Dashboard = () => {
                     <Col id="btn1">
                     <button className= "btn btn-secondary" onClick={handleNewCampaignClick} >Start a new adventure!</button>
                     </Col>
+
                     <Col id="btn2">
                         <label>
-                        Join an existing adventure!
+                        Join an existing adventure!</label>
                         <select
                             value={selectedOption}
                             onChange={handleSelectChange}
@@ -142,8 +169,9 @@ const Dashboard = () => {
                                 </option>
                             ))}
                         </select>
-                        </label>
+                        
                     </Col>
+
                     <Col className="btn3">
                     {textAreaVisible && (
                     <form onSubmit={handleJoinSubmit}>
@@ -152,6 +180,8 @@ const Dashboard = () => {
                             <textarea
                             rows="1"
                             cols="25"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             />
                         </label>
                         <button type="submit" className="btn btn-primary">
