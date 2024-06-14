@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import '../index.scss';
 import campfireGif from '../assets/Campfire2D.gif';
 import { useNavigate } from "react-router-dom";
@@ -28,4 +29,4 @@ const SplashPage = () => {
     )
 }
 
-export default SplashPage
+export default SplashPage;

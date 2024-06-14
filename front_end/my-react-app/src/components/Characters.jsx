@@ -1,153 +1,73 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../index.scss';
 
 const Characters = () => {
-    const { id } = useParams();
-    const [characters, setCharacters] = useState([]);
+  const [characters, setCharacters] = useState([]);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        // Simulate fetching data
-        const fetchData = async () => {
-            // Replace this with actual data fetching logic
-            const data = [
-                {
-                    basicInfo: {
-                        name: 'Tav',
-                        class: 'Bard',
-                        level: 5,
-                        race: 'Half-Elf',
-                        alignment: 'Chaotic Good',
-                    },
-                    attributes: {
-                        strength: 8,
-                        dexterity: 14,
-                        constitution: 12,
-                        intelligence: 10,
-                        wisdom: 10,
-                        charisma: 16,
-                    },
-                    skills: {
-                        acrobatics: 5,
-                        animalHandling: 0,
-                        arcana: 2,
-                        athletics: -1,
-                        deception: 7,
-                        history: 0,
-                        insight: 0,
-                        intimidation: 3,
-                        investigation: 0,
-                        medicine: 0,
-                        nature: 0,
-                        perception: 2,
-                        performance: 10,
-                        persuasion: 10,
-                        religion: 0,
-                        sleightOfHand: 5,
-                        stealth: 5,
-                        survival: 0,
-                    },
-                    equipment: [
-                        'Lute',
-                        'Rapier',
-                        'Leather Armor',
-                        'Dagger',
-                        'Explorer\'s Pack',
-                    ],
-                },
-                {
-                    basicInfo: {
-                        name: 'Aelar',
-                        class: 'Rogue',
-                        level: 3,
-                        race: 'Elf',
-                        alignment: 'Neutral Good',
-                    },
-                    attributes: {
-                        strength: 10,
-                        dexterity: 18,
-                        constitution: 12,
-                        intelligence: 14,
-                        wisdom: 8,
-                        charisma: 10,
-                    },
-                    skills: {
-                        acrobatics: 7,
-                        animalHandling: 0,
-                        arcana: 1,
-                        athletics: 1,
-                        deception: 3,
-                        history: 2,
-                        insight: 3,
-                        intimidation: 2,
-                        investigation: 4,
-                        medicine: 0,
-                        nature: 1,
-                        perception: 6,
-                        performance: 0,
-                        persuasion: 4,
-                        religion: 0,
-                        sleightOfHand: 7,
-                        stealth: 9,
-                        survival: 1,
-                    },
-                    equipment: [
-                        'Shortsword',
-                        'Dagger',
-                        'Thieves\' Tools',
-                        'Leather Armor',
-                        'Explorer\'s Pack',
-                    ],
-                },
-                // Add more character data as needed
-            ];
-            setCharacters(data);
-        };
-        fetchData();
-    }, []);
+  useEffect(() => {
+    // Fetch character sheets for the logged-in user
+    const fetchCharacters = async () => {
+      const response = await fetchUserCharacters(); // Replace with API call
+      setCharacters(response);
+    };
 
-    return (
-        <div className="characters">
-            <h2>Campaign {id}</h2>
-            {characters.map((character, index) => (
-                <div key={index} className="character-container">
-                    <h3>{character.basicInfo.name}</h3>
-                    <p>Class: {character.basicInfo.class}</p>
-                    <p>Level: {character.basicInfo.level}</p>
-                    <p>Race: {character.basicInfo.race}</p>
-                    <p>Alignment: {character.basicInfo.alignment}</p>
-                    <div className="attributes">
-                        <h4>Attributes</h4>
-                        <ul>
-                            {Object.keys(character.attributes).map(attr => (
-                                <li key={attr}>
-                                    {attr.charAt(0).toUpperCase() + attr.slice(1)}: {character.attributes[attr]}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="skills">
-                        <h4>Skills</h4>
-                        <ul>
-                            {Object.keys(character.skills).map(skill => (
-                                <li key={skill}>
-                                    {skill.charAt(0).toUpperCase() + skill.slice(1)}: {character.skills[skill]}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="equipment">
-                        <h4>Equipment</h4>
-                        <ul>
-                            {character.equipment.map((item, itemIndex) => (
-                                <li key={itemIndex}>{item}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            ))}
-        </div>
-    )
-}
+    fetchCharacters();
+  }, []);
 
-export default Characters
+  const fetchUserCharacters = async () => {
+    // Replace this mock data with the API call to fetch character sheets for the user. This is showing a snapshot of the character and will shot the full character sheet when clicked.
+    return [
+      {
+        id: 1,
+        name: 'Character 1',
+        class: 'Wizard',
+        level: 5,
+        image: 'path/to/image1.jpg'
+      },
+      {
+        id: 2,
+        name: 'Character 2',
+        class: 'Rogue',
+        level: 3,
+        image: 'path/to/image2.jpg'
+      }
+    ];
+  };
+
+  const handleCharacterClick = (characterId) => {
+    navigate(`/character/${characterId}`); // Navigate to the character sheet view
+  };
+
+  return (
+    <div className="characters-page">
+      <h2>Your Characters</h2>
+      <div className="character-list">
+        {characters.map((character) => (
+          <div
+            key={character.id}
+            className="character-card"
+            onClick={() => handleCharacterClick(character.id)}
+            style={{ backgroundImage: character.image ? `url(${character.image})` : 'none' }}
+          >
+            {!character.image && (
+              <div className="placeholder">
+                <h4>{character.name}</h4>
+                <p>{character.class} - Level {character.level}</p>
+              </div>
+            )}
+            {character.image && (
+              <div className="card-body">
+                <h4>{character.name}</h4>
+                <p>{character.class} - Level {character.level}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Characters;
