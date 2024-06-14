@@ -29,6 +29,18 @@ def get_chars():
     except Exception as err:
         print(f"Error: {err}")
         return jsonify({'error': 'Failed to retrieve characters'}), 500
+    
+
+# gets character by id
+@char_bp.route('/<int:char_id>', methods=['GET'])
+@jwt_required()
+def get_char_by_id(char_id):
+    try:
+        character = Character.query.get(char_id)
+        return jsonify(character.to_dict())
+    except Exception as err:
+        print(f"Error: {err}")
+        return jsonify({'error': 'Failed to retrieve characters'}), 500
 
 
 # create character after logging in
