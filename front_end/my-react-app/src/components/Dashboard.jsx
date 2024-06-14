@@ -18,12 +18,12 @@ const Dashboard = () => {
     const [allCampaigns, setAllCampaigns] = useState([]);
 
     const navigate = useNavigate();
+    const token = getToken();
 
     // fetch all campaigns associated with logged in user
     useEffect(() => {
         const fetchUserCampaigns = async () => {
-          try {
-            const token = getToken(); 
+          try { 
             const response = await fetch('http://127.0.0.1:5000/usercamp/', {
               method: 'GET',
               headers: {
@@ -53,6 +53,7 @@ const Dashboard = () => {
             const response = await fetch('http://127.0.0.1:5000/campaigns/', {
               method: 'GET',
               headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
               }
             });
@@ -99,7 +100,7 @@ const Dashboard = () => {
         
         setSelectedOption(event.target.value);
         setTextAreaVisible(true);
-        console.log('selected option:', selectedOption);
+        // console.log('selected option:', selectedOption);
     };
 
     const handleJoinSubmit = async (event) => {
