@@ -1,13 +1,26 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 import '../index.scss';
+import { getToken } from "../utils/auth";
+import { jwtDecode } from "jwt-decode";
 
 
 const CampaignCard = ({ campaign }) => {
-    console.log(campaign)
+
+    const token = getToken();
+    const decodedToken = jwtDecode(token);
+
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate(`/campaigns/${campaign.id}`);
+        try {
+            if (campaign.dm === decodedToken.sub.userId) { 
+                navigate(`/dmdashboard`);
+            } else {
+                navigate(`/campaigns/${campaign.id}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
     return (

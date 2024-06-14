@@ -104,12 +104,11 @@ const Dashboard = () => {
     };
 
     const handleJoinSubmit = async (event) => {
-        console.log('selected option in submit:', selectedOption);
-        console.log('password in submit:', password);
+        // console.log('selected option in submit:', selectedOption);
+        // console.log('password in submit:', password);
         event.preventDefault();
         // Handle the form submission
         try {
-            const token = getToken(); 
             const response = await fetch('http://127.0.0.1:5000/usercamp/join', {
               method: 'POST',
               headers: {
