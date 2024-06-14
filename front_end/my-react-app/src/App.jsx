@@ -16,7 +16,7 @@ import Characters from './components/Characters.jsx'
 import DmDashboard from './components/DmDashboard.jsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
 import CampaignDetails from './components/CampaignDetails.jsx'
-import { ProtectedRoute, PublicRoute } from './components/protectedRoute.jsx'
+import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute.jsx'
 import CharacterSheet from './components/CharacterSheet.jsx'
 import NewCampaign from './components/NewCampaign.jsx'
 
