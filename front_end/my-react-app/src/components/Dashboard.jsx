@@ -4,18 +4,24 @@ import '../index.scss';
 import Navigation from "./Navigation";
 import CampaignCard from "./CampaignCard";
 import { getToken } from "../utils/auth";
+import { useNavigate } from 'react-router-dom';
 
 // Import images
 import image1 from '../assets/cardimage-1.jpg'
 import image2 from '../assets/cardimage-2.jpg'
 import image3 from '../assets/cardimage-3.jpg'
 
-const Dashboard = () => {
-    /****   Testing Code for fetching campaigns  getting a CORS error. ****/ 
-    const [campaigns, setCampaigns] = useState([]);
 
+const Dashboard = () => {
+    /****   Testing Code for fetching userCampaigns  getting a CORS error. ****/ 
+    const [userCampaigns, setUserCampaigns] = useState([]);
+    const [allCampaigns, setAllCampaigns] = useState([]);
+
+    const navigate = useNavigate();
+
+    // fetch all campaigns associated with logged in user
     useEffect(() => {
-        const fetchCampaigns = async () => {
+        const fetchUserCampaigns = async () => {
           try {
             const token = getToken(); 
             const response = await fetch('http://127.0.0.1:5000/usercamp/', {
@@ -30,17 +36,41 @@ const Dashboard = () => {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            setCampaigns(data);
+            setUserCampaigns(data);
           } catch (error) {
-            console.error('Error fetching campaigns:', error);
+            console.error('Error fetching userCampaigns:', error);
           }
         };
     
-        fetchCampaigns();
+        fetchUserCampaigns();
       }, []);
-    
 
-    // const campaigns = [
+    //   fetch all campaigns but only the id and name
+      useEffect(() => {
+        const fetchAllCampaigns = async () => {
+          try {
+             
+            const response = await fetch('http://127.0.0.1:5000/campaigns/', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            setAllCampaigns(data);
+          } catch (error) {
+            console.error('Error fetching userCampaigns:', error);
+          }
+        };
+    
+        fetchAllCampaigns();
+      }, []);
+
+    // const userCampaigns = [
     //     { 
     //         id: 1,
     //         name: 'Campaign 1',
@@ -63,17 +93,48 @@ const Dashboard = () => {
 
     const [selectedOption, setSelectedOption] = useState('');
     const [textAreaVisible, setTextAreaVisible] = useState(false);
+    const [password, setPassword] = useState('');
 
-    const handleSelectChange = (event) => {
+    const handleSelectChange =  (event) => {
+        
         setSelectedOption(event.target.value);
         setTextAreaVisible(true);
+        console.log('selected option:', selectedOption);
     };
 
-    const handleSubmit = (event) => {
+    const handleJoinSubmit = async (event) => {
+        console.log('selected option in submit:', selectedOption);
+        console.log('password in submit:', password);
         event.preventDefault();
         // Handle the form submission
-        console.log('Selected Option:', selectedOption);
+        try {
+            const token = getToken(); 
+            const response = await fetch('http://127.0.0.1:5000/usercamp/join', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({campaign_id: selectedOption, password: password})
+            });
+
+
+            console.log('Response:',response)
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+
+            }
+            window.location.reload()
+          } catch (error) {
+            console.error('Error joining campaign:', error);
+          }
+        console.log('Selected Option after join:', selectedOption);
     };
+    
+    
+    const handleNewCampaignClick = () => {
+        navigate("/userCampaigns/new");
+    }
 
     return (
         <div className="dashboard">
@@ -81,40 +142,46 @@ const Dashboard = () => {
                 <Row>
                     <Col>
                         <h2>Welcome to the Dashboard</h2>
-                        <p>Here you can manage your Dungeons & Dragons campaigns.</p>
+                        <p>Here you can manage your Dungeons & Dragons userCampaigns.</p>
                     </Col>
                 </Row>
                 <Row className="cards-row">
-                    {campaigns.map(campaign => (
+                    {userCampaigns.map(campaign => (
                         <CampaignCard key={campaign.id} campaign={campaign} />
                     ))}
                 </Row>
                 <Row className="cards-row">
                     <Col id="btn1">
-                    <button className= "btn btn-secondary" href="/campaigns/new">Start a new adventure!</button>
+                    <button className= "btn btn-secondary" onClick={handleNewCampaignClick} >Start a new adventure!</button>
                     </Col>
+
                     <Col id="btn2">
                         <label>
-                        Join an existing adventure!
+                        Join an existing adventure!</label>
                         <select
                             value={selectedOption}
                             onChange={handleSelectChange}
                         >
                             <option value="">--Choose an option--</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
+                            {allCampaigns.map(campaign => (
+                                <option key={campaign.id} value={campaign.id}>
+                                    {campaign.name}
+                                </option>
+                            ))}
                         </select>
-                        </label>
+                        
                     </Col>
+
                     <Col className="btn3">
                     {textAreaVisible && (
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleJoinSubmit}>
                         <label>
                             Campaign Password:
                             <textarea
                             rows="1"
                             cols="25"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             />
                         </label>
                         <button type="submit" className="btn btn-primary">
