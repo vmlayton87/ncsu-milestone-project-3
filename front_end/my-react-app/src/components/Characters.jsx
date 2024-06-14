@@ -5,40 +5,29 @@ import '../index.scss';
 const Characters = () => {
   const [characters, setCharacters] = useState([]);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Fetch character sheets for the logged-in user
-    const fetchCharacters = async () => {
-      const response = await fetchUserCharacters(); // Replace with API call
-      setCharacters(response);
-    };
+    useEffect(() => {
+        // Simulate fetching data
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/characters/');
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`)
+                }
+                const result = await response.json();
+                setCharacters(result);    
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+        fetchData();
+    }, []);
 
-    fetchCharacters();
-  }, []);
-
-  const fetchUserCharacters = async () => {
-    // Replace this mock data with the API call to fetch character sheets for the user. This is showing a snapshot of the character and will shot the full character sheet when clicked.
-    return [
-      {
-        id: 1,
-        name: 'Character 1',
-        class: 'Wizard',
-        level: 5,
-        image: 'path/to/image1.jpg'
-      },
-      {
-        id: 2,
-        name: 'Character 2',
-        class: 'Rogue',
-        level: 3,
-        image: 'path/to/image2.jpg'
-      }
-    ];
-  };
-
-  const handleCharacterClick = (characterId) => {
+    const handleCharacterClick = (characterId) => {
     navigate(`/character/${characterId}`); // Navigate to the character sheet view
-  };
+    };
 
   return (
     <div className="characters-page">
