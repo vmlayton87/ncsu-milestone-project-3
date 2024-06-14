@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 
 const NewCampaign = () => {
 
+    const token = getToken(); 
+
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         name: '',
         password: '',
-        // confirmpassword: '',
+        image_url: '',
         description: ''
     })
 // function to update state with user info
@@ -28,7 +30,6 @@ const NewCampaign = () => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
         try {
-            const token = getToken(); 
             const response = await fetch('http://127.0.0.1:5000/usercamp/', {
               method: 'POST',
               headers: {
@@ -40,7 +41,7 @@ const NewCampaign = () => {
 
             const data = await response.json();
 
-            console.log('Response:',response)
+            console.log('Response:',data)
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -50,7 +51,6 @@ const NewCampaign = () => {
           }
           navigate("/dashboard")
         }
-        console.log(formData)
     
 
     return (
@@ -81,16 +81,16 @@ const NewCampaign = () => {
                             />
                         </Form.Group>
 
-                        {/* <Form.Group controlId="confirmPassword">
-                            <Form.Label className="form-label">Confirm Password</Form.Label>
+                         <Form.Group controlId="image_url">
+                            <Form.Label className="form-label">Image Url</Form.Label>
                             <Form.Control
-                                type="password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
+                                type="text"
+                                name="image_url"
+                                value={formData.image_url}
                                 onChange={handleChange}
                                 required
                             />
-                        </Form.Group> */}
+                        </Form.Group> 
 
                         <Form.Group controlId="description">
                             <Form.Label className="form-label">Campaign Description</Form.Label>

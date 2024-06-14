@@ -21,6 +21,9 @@ def get_chars():
     try:
         user_id = get_jwt_identity()['userId']
         user = User.query.get(user_id)
+        if not user:
+            print("User not found")
+            return jsonify({'error': 'User not found'}), 404
         characters = [char.to_dict() for char in user.characters]
         return jsonify(characters)
     except Exception as err:

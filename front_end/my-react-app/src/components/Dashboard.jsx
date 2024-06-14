@@ -18,12 +18,12 @@ const Dashboard = () => {
     const [allCampaigns, setAllCampaigns] = useState([]);
 
     const navigate = useNavigate();
+    const token = getToken();
 
     // fetch all campaigns associated with logged in user
     useEffect(() => {
         const fetchUserCampaigns = async () => {
-          try {
-            const token = getToken(); 
+          try { 
             const response = await fetch('http://127.0.0.1:5000/usercamp/', {
               method: 'GET',
               headers: {
@@ -31,7 +31,7 @@ const Dashboard = () => {
                 'Content-Type': 'application/json'
               }
             });
-            console.log('Response:',response)
+            // console.log('Response:',response)
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -53,6 +53,7 @@ const Dashboard = () => {
             const response = await fetch('http://127.0.0.1:5000/campaigns/', {
               method: 'GET',
               headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
               }
             });
@@ -99,16 +100,15 @@ const Dashboard = () => {
         
         setSelectedOption(event.target.value);
         setTextAreaVisible(true);
-        console.log('selected option:', selectedOption);
+        // console.log('selected option:', selectedOption);
     };
 
     const handleJoinSubmit = async (event) => {
-        console.log('selected option in submit:', selectedOption);
-        console.log('password in submit:', password);
+        // console.log('selected option in submit:', selectedOption);
+        // console.log('password in submit:', password);
         event.preventDefault();
         // Handle the form submission
         try {
-            const token = getToken(); 
             const response = await fetch('http://127.0.0.1:5000/usercamp/join', {
               method: 'POST',
               headers: {
@@ -133,7 +133,7 @@ const Dashboard = () => {
     
     
     const handleNewCampaignClick = () => {
-        navigate("/userCampaigns/new");
+        navigate("/Campaigns/new");
     }
 
     return (

@@ -54,8 +54,15 @@ def create_character(campaign_id):
 
 # GET route
 @campaign_bp.route('/', methods=['GET'])
-# get all notes and turn it in a json object
+@jwt_required()
+# get all campaigns and turn it in a json object
 def get_campaigns():
+
+    current_user = get_jwt_identity()
+    user = User.query.get(current_user['userId'])
+    if not user:
+        print("User not found")
+        return jsonify({'error': 'User not found'}), 404
     
     try:
         results = Campaign.query.all()

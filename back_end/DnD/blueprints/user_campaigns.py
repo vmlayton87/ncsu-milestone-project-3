@@ -62,7 +62,7 @@ def get_camps():
         # campaigns = [campaign.to_dict() for campaign in user.campaigns] # returns the UserCampaign object
 
         campaigns = [user_campaign.campaign.to_dict() for user_campaign in user.campaigns] # gets all campaigns associated with the user
-        print('testing what campaigns looks like: ', campaigns)
+        # print('testing what campaigns looks like: ', campaigns)
         # return the campaigns as a json object
         return jsonify(campaigns), 200 # returns the list of campaigns 
         
