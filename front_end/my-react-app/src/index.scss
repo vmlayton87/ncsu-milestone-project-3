@@ -383,6 +383,12 @@ html, body {
     margin-bottom: 20px;
   }
 
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; // Adjust this value to your desired spacing
+  }
+
   .character-list {
     display: flex;
     flex-wrap: wrap;
@@ -598,13 +604,13 @@ html, body {
   h2 {
     color: #f0f0f0;
   }
-}
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
 }
 
 // Media queries, tablet size

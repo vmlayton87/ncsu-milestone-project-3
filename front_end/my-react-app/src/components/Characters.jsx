@@ -42,9 +42,11 @@ const Characters = () => {
   return (
     <div className="characters-page">
       <h2>Your Characters</h2>
+      <div className="button-container">
       <Button variant="primary" onClick={() => navigate('/create-character')}>
         Create New Character
       </Button>
+      </div>
       <div className="character-list">
         {characters.map((character) => (
           <div
