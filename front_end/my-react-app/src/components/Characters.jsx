@@ -15,7 +15,6 @@ const Characters = () => {
     // Simulate fetching data
     const fetchData = async () => {
       try {
-        const token = getToken();
         const response = await fetch('http://127.0.0.1:5000/characters/', {
           method: 'GET',
           headers: {
