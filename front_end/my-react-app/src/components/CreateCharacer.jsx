@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DnDCharacterStatsSheet } from 'dnd-character-sheets';
 import 'dnd-character-sheets/dist/index.css';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from "../utils/auth";
 import '../index.scss';
@@ -10,29 +10,15 @@ const CreateCharacter = () => {
 
   const token = getToken();
 
-  const [character, setCharacter] = useState({
-    // name: '',
-    // class: '',
-    // level: 1,
-    // race: '',
-    // alignment: '',
-    // abilities: {
-    //   strength: 10,
-    //   dexterity: 10,
-    //   constitution: 10,
-    //   intelligence: 10,
-    //   wisdom: 10,
-    //   charisma: 10
-    // },
-    // skills: [],
-    // equipment: []
-  });
+  const [character, setCharacter] = useState({ })
 
   const navigate = useNavigate();
 
-  const updateCharacter = (updatedCharacter) => {
-    console.log('Character updated:', updatedCharacter); // Debugging line
+  const handleImageUrlChange = (e) => {
+    setCharacter({ ...character, image: e.target.value });
+  };
 
+  const updateCharacter = (updatedCharacter) => {
     // Function to flatten the updatedCharacter object
     const flattenObject = (obj, result = {}) => {
       for (let key in obj) {
@@ -48,7 +34,6 @@ const CreateCharacter = () => {
     };
 
     const flattedUpdatedCharacter = flattenObject(updatedCharacter);
-    console.log('Flatted Updated Character:',flattedUpdatedCharacter)
     setCharacter(flattedUpdatedCharacter);
   };
 
@@ -60,7 +45,7 @@ const CreateCharacter = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(character)
+        body: JSON.stringify(character),
       });
 
       if (response.ok) {
@@ -77,6 +62,17 @@ const CreateCharacter = () => {
     <Container className="create-character-page">
       <h2>Create New Character</h2>
       <DnDCharacterStatsSheet character={character} onCharacterChanged={updateCharacter} />
+
+      <Form.Group controlId="image">
+        <Form.Label>Image URL</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter character image URL"
+          value={character.image}
+          onChange={handleImageUrlChange}
+        />
+      </Form.Group>
+
       <div className="button-container">
         <Button variant="primary" onClick={saveCharacter}>Save Character</Button>
       </div>
