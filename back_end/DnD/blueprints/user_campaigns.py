@@ -29,6 +29,7 @@ def create_camp():
         # user = user.to_dict()
         print('testing what user looks like: ', user)
         # create a new campaign
+        data["dm"] = user_id
         new_camp = Campaign(**data)
         print('testing what new_camp looks like: ', new_camp)
 
