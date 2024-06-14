@@ -36,16 +36,16 @@ const Characters = () => {
   }, []);
 
   const handleCharacterClick = (characterId) => {
-    navigate(`/character/${characterId}`); // Navigate to the character sheet view
+    navigate(`/character/${characterId}`)
   };
 
   return (
     <div className="characters-page">
       <h2>Your Characters</h2>
       <div className="button-container">
-      <Button variant="primary" onClick={() => navigate('/create-character')}>
-        Create New Character
-      </Button>
+        <Button variant="primary" onClick={() => navigate('/create-character')}>
+          Create New Character
+        </Button>
       </div>
       <div className="character-list">
         {characters.map((character) => (
@@ -67,11 +67,26 @@ const Characters = () => {
                 <p>{character.class} - Level {character.level}</p>
               </div>
             )}
+            <div className="button-group">
+              <Button variant="secondary" onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/edit-character/${character.id}`);
+              }}>
+                Edit
+              </Button>
+              <Button variant="danger" onClick={(e) => {
+                e.stopPropagation();
+                // Placeholder for delete API call
+                console.log(`Delete character with ID ${character.id}`);
+              }}>
+                Delete
+              </Button>
+            </div>
           </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Characters;
