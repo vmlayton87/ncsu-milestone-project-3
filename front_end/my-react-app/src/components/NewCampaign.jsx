@@ -2,13 +2,18 @@ import React from "react";
 import { useState } from "react";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
+import { getToken } from "../utils/auth";
+import { useNavigate } from 'react-router-dom';
 
 const NewCampaign = () => {
+
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
-        campaignname: '',
+        name: '',
         password: '',
-        confirmpassword: '',
-        campaigndescription: ''
+        // confirmpassword: '',
+        description: ''
     })
 // function to update state with user info
     const handleChange = (e) => {
@@ -19,11 +24,34 @@ const NewCampaign = () => {
         })
     }
 // function to submit form
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
+        try {
+            const token = getToken(); 
+            const response = await fetch('http://127.0.0.1:5000/usercamp/', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            console.log('Response:',response)
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+          } catch (error) {
+            console.error('Error creating campaign:', error);
+          }
+          navigate("/dashboard")
+        }
         console.log(formData)
-    }
+    
 
     return (
         <Container className="new-campaign-page">
@@ -31,12 +59,12 @@ const NewCampaign = () => {
                 <Col md={6}>
                     <h2>Create a Campaign</h2>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="campaignname">
+                        <Form.Group controlId="name">
                             <Form.Label className="form-label">Campaign Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="campaignname"
-                                value={formData.campaignname}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleChange}
                                 required
                             />
@@ -46,14 +74,14 @@ const NewCampaign = () => {
                             <Form.Label className="form-label">Campaign Password</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="campaignpassword"
-                                value={formData.campaignpassword}
+                                name="password"
+                                value={formData.password}
                                 onChange={handleChange}
                                 required
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="confirmPassword">
+                        {/* <Form.Group controlId="confirmPassword">
                             <Form.Label className="form-label">Confirm Password</Form.Label>
                             <Form.Control
                                 type="password"
@@ -62,16 +90,16 @@ const NewCampaign = () => {
                                 onChange={handleChange}
                                 required
                             />
-                        </Form.Group>
+                        </Form.Group> */}
 
-                        <Form.Group controlId="campaigndescription">
+                        <Form.Group controlId="description">
                             <Form.Label className="form-label">Campaign Description</Form.Label>
                             <textarea
                                 className="form-control"
                                 rows="5"
                                 type="text"
-                                name="campaigndescription"
-                                value={formData.campaigndescription}
+                                name="description"
+                                value={formData.description}
                                 onChange={handleChange}
                                 required
                             />

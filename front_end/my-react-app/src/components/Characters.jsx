@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../index.scss';
+import { getToken } from "../utils/auth";
 
 const Characters = () => {
   const [characters, setCharacters] = useState([]);
@@ -12,7 +13,14 @@ const Characters = () => {
         // Simulate fetching data
         const fetchData = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:5000/characters/');
+                const token = getToken();
+                const response = await fetch('http://127.0.0.1:5000/characters/',{
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                  }
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status}`)
                 }

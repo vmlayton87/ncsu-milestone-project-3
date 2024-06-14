@@ -4,6 +4,7 @@ import '../index.scss';
 
 
 const CampaignCard = ({ campaign }) => {
+    console.log(campaign)
     const navigate = useNavigate();
     const handleClick = () => {
         navigate(`/campaigns/${campaign.id}`);
