@@ -33,9 +33,9 @@ function App() {
         <Route path="/campaigns/new" element={<ProtectedRoute> <NewCampaign /> </ProtectedRoute>} />
         <Route path="/dmdashboard" element={<ProtectedRoute><DmDashboard /></ProtectedRoute>} />
         <Route path="/characters" element={<ProtectedRoute><Characters /></ProtectedRoute>} />
-        <Route path="/create-character" element={<CreateCharacter />} />
+        <Route path="/create-character" element={<ProtectedRoute> <CreateCharacter /> </ProtectedRoute>} />
         <Route path="/campaigns/:id" element={<ProtectedRoute> <CampaignDetails /> </ProtectedRoute>} />
-        <Route path="/character/:id" element={<CharacterSheet />} />
+        <Route path="/character/:id" element={<ProtectedRoute> <CharacterSheet /> </ProtectedRoute>} />
         <Route path="/logout" element={() => {
         }} />
       </Routes>
