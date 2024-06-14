@@ -56,11 +56,14 @@ def get_camps():
             print("User not found")
             return jsonify({'error': 'User not found'}), 404
         # get the campaigns
-        campaigns = [campaign.to_dict() for campaign in user.campaigns]
-        print('checking campaigns: ', campaigns)
-        # return the campaigns as a json object
-        return jsonify(campaigns)
+        print('testing what user.campaigns looks like: ', user.campaigns)
+        
+        # campaigns = [campaign.to_dict() for campaign in user.campaigns] # returns the UserCampaign object
 
+        campaigns = [user_campaign.campaign.to_dict() for user_campaign in user.campaigns] # gets all campaigns associated with the user
+        print('testing what campaigns looks like: ', campaigns)
+        # return the campaigns as a json object
+        return jsonify(campaigns), 200 # returns the list of campaigns 
         
     except Exception as err:
         print(f"Error5533: {err}")
