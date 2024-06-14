@@ -4,6 +4,7 @@ import '../index.scss';
 import Navigation from "./Navigation";
 import CampaignCard from "./CampaignCard";
 import { getToken } from "../utils/auth";
+import { useNavigate } from 'react-router-dom';
 
 // Import images
 import image1 from '../assets/cardimage-1.jpg'
@@ -74,6 +75,11 @@ const Dashboard = () => {
         // Handle the form submission
         console.log('Selected Option:', selectedOption);
     };
+    
+    const navigate = useNavigate();
+    const handleNewCampaignClick = () => {
+        navigate("/campaigns/new");
+    }
 
     return (
         <div className="dashboard">
@@ -91,7 +97,7 @@ const Dashboard = () => {
                 </Row>
                 <Row className="cards-row">
                     <Col id="btn1">
-                    <button className= "btn btn-secondary" href="/campaigns/new">Start a new adventure!</button>
+                    <button className= "btn btn-secondary" onClick={handleNewCampaignClick} >Start a new adventure!</button>
                     </Col>
                     <Col id="btn2">
                         <label>
