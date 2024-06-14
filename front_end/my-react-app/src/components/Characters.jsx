@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../index.scss';
 
 const Characters = () => {
@@ -27,48 +27,34 @@ const Characters = () => {
         fetchData();
     }, []);
 
-    return (
-        <div className="characters">
-            <h2>Campaign {id}</h2>
-            {characters.map((character, index) => (
-                <div key={index} className="character-container">
-                    <h3>{character.basicInfo.name}</h3>
-                    <p>Class: {character.basicInfo.class}</p>
-                    <p>Level: {character.basicInfo.level}</p>
-                    <p>Race: {character.basicInfo.race}</p>
-                    <p>Alignment: {character.basicInfo.alignment}</p>
-                    <div className="attributes">
-                        <h4>Attributes</h4>
-                        <ul>
-                            {Object.keys(character.attributes).map(attr => (
-                                <li key={attr}>
-                                    {attr.charAt(0).toUpperCase() + attr.slice(1)}: {character.attributes[attr]}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="skills">
-                        <h4>Skills</h4>
-                        <ul>
-                            {Object.keys(character.skills).map(skill => (
-                                <li key={skill}>
-                                    {skill.charAt(0).toUpperCase() + skill.slice(1)}: {character.skills[skill]}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="equipment">
-                        <h4>Equipment</h4>
-                        <ul>
-                            {character.equipment.map((item, itemIndex) => (
-                                <li key={itemIndex}>{item}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            ))}
-        </div>
-    )
-}
+  return (
+    <div className="characters-page">
+      <h2>Your Characters</h2>
+      <div className="character-list">
+        {characters.map((character) => (
+          <div
+            key={character.id}
+            className="character-card"
+            onClick={() => handleCharacterClick(character.id)}
+            style={{ backgroundImage: character.image ? `url(${character.image})` : 'none' }}
+          >
+            {!character.image && (
+              <div className="placeholder">
+                <h4>{character.name}</h4>
+                <p>{character.class} - Level {character.level}</p>
+              </div>
+            )}
+            {character.image && (
+              <div className="card-body">
+                <h4>{character.name}</h4>
+                <p>{character.class} - Level {character.level}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-export default Characters
+export default Characters;
