@@ -3,7 +3,6 @@ import { Container, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../index.scss';
 import campfireGif from '../assets/Campfire2D.gif';
-import { useNavigate } from "react-router-dom";
 // To-do: if user is logged in, this page should route to /dashboard
 // Task completed: handled in the ProtectedRoute component
 
