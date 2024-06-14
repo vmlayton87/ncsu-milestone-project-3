@@ -22,7 +22,10 @@ def create_app():
     db.init_app(app)
     
     #Enable CORS
-    CORS(app)
+    # CORS(app)
+    CORS(app, origins = ['http://localhost:5173'], methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allow_headers=['Content-Type', 'Authorization'], supports_credentials=True)
+
+
     bcrypt = Bcrypt(app)
     # Initialize JWT
     jwt = JWTManager(app)

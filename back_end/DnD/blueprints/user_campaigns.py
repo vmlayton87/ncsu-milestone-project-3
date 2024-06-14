@@ -52,6 +52,9 @@ def get_camps():
     try:
         user_id = get_jwt_identity()['userId']
         user = User.query.get(user_id)
+        if not user:
+            print("User not found")
+            return jsonify({'error': 'User not found'}), 404
         # get the campaigns
         campaigns = [campaign.to_dict() for campaign in user.campaigns]
         print('checking campaigns: ', campaigns)
@@ -60,7 +63,7 @@ def get_camps():
 
         
     except Exception as err:
-        print(f"Error: {err}")
+        print(f"Error5533: {err}")
         return jsonify({'error': 'Failed to retrieve campaigns'}), 500
 
 # join a campaign

@@ -32,7 +32,7 @@ def get_users():
 @user_bp.route('/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:
-        user = User.query.get(user_id)     
+        user_data = User.query.get(user_id)     
         return jsonify(user_data.to_dict())
     except Exception as err:
         print(f"Error: {err}")

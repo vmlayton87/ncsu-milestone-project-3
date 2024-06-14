@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import '../index.scss';
 
 const Characters = () => {
-    const { id } = useParams();
-    const [characters, setCharacters] = useState([]);
-    const [error, setError] = useState(null);
+  const [characters, setCharacters] = useState([]);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [error, setError] = useState(null);
 
     useEffect(() => {
         // Simulate fetching data
@@ -20,12 +21,13 @@ const Characters = () => {
             } catch (error) {
                 setError(error.message);
             }
-
-            const data = response;
-            setCharacters(data);
         };
         fetchData();
     }, []);
+
+    const handleCharacterClick = (characterId) => {
+    navigate(`/character/${characterId}`); // Navigate to the character sheet view
+    };
 
   return (
     <div className="characters-page">
