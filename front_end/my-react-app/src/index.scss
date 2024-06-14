@@ -591,13 +591,17 @@ html, body {
 }
 
 .create-character-page {
-  padding-bottom: 100px; // Adjust this value as needed
+  padding-bottom: 100px;
+  margin-top: 20px;
+  color: #f0f0f0;
+  font-family: 'Amarante';
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px; // Adjust this value as needed
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 // Media queries, tablet size
