@@ -58,13 +58,13 @@ const Characters = () => {
             {!character.image && (
               <div className="placeholder">
                 <h4>{character.name}</h4>
-                <p>{character.class} - Level {character.level}</p>
+                <p>{character.race} - {character.class} - Level {character.level}</p>
               </div>
             )}
             {character.image && (
               <div className="card-body">
                 <h4>{character.name}</h4>
-                <p>{character.class} - Level {character.level}</p>
+                <p>{character.race} - {character.class} - Level {character.level}</p>
               </div>
             )}
             <div className="button-group">
@@ -87,6 +87,7 @@ const Characters = () => {
       </div>
     </div>
   )
+
 }
 
 export default Characters;
