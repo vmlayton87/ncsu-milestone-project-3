@@ -1,11 +1,11 @@
 // Protected Route to check if user is logged in
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { tokenExists, isTokenExpired } from '../utils/auth';
+import { hasValidToken } from '../utils/auth';
 
 // eslint-disable-next-line react/prop-types
 const ProtectedRoute = ({ children }) => {
-    if (!tokenExists() || isTokenExpired()) {
+    if (!hasValidToken()) {
         return <Navigate to="/" />;
     }
 
@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
 const PublicRoute = ({ children }) => {
     const location = useLocation();
 
-    if (tokenExists() && !isTokenExpired() &&(location.pathname === '/' || location.pathname === '/login' || location.pathname === '/signup')) {
+    if (hasValidToken() &&(location.pathname === '/' || location.pathname === '/login' || location.pathname === '/signup')) {
         return <Navigate to="/dashboard" />;
     }
 

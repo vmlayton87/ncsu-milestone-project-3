@@ -21,3 +21,9 @@ export const isTokenExpired = () => {
     const currentTime = Date.now() / 1000; 
     return decodedToken.exp < currentTime;
 }
+
+
+// Check if user has a valid token (exists and not expired)
+export const hasValidToken = () => {
+    return tokenExists() && !isTokenExpired();
+}

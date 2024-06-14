@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
 import Navigation from "./Navigation";
 import CampaignCard from "./CampaignCard";
+import { getToken } from "../utils/auth";
 
 // Import images
 import image1 from '../assets/cardimage-1.jpg'
@@ -16,18 +17,19 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchCampaigns = async () => {
           try {
-            const token = localStorage.getItem('access_token');  // Assuming token is stored in local storage
-            const response = await fetch('http://127.0.0.1:5000/usercamp', {
+            const token = getToken(); 
+            const response = await fetch('http://127.0.0.1:5000/usercamp/', {
               method: 'GET',
               headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
               }
             });
-            console.log(response)
+            console.log('Response:',response)
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            const data = await response.json;
+            const data = await response.json();
             setCampaigns(data);
           } catch (error) {
             console.error('Error fetching campaigns:', error);

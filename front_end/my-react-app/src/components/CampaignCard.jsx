@@ -12,7 +12,7 @@ const CampaignCard = ({ campaign }) => {
     return (
         <div className="card-container" onClick={handleClick}>
             <div className="card">
-                <div className="card-front" style={{ backgroundImage: `url(${campaign.image})`}}>
+                <div className="card-front" style={{ backgroundImage: `url(${campaign.image_url})`}}>
                     <h3>{campaign.name}</h3>
                 </div>
                 <div className="card-back">
