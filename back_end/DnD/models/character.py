@@ -210,6 +210,11 @@ class Character(db.Model):
     def to_dict(self):
         data = {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
         # data['user'] = self.user.to_dict()
-        data.pop('user', None)  # This removes the 'user' key if present
+        # Remove sensitive information from user
+        if 'user' in data:
+            user_data = self.user.to_dict()
+            data['user'] = {'id': user_data['id']}
+        data.pop('hashed_password', None)
+        data.pop('email', None)
         data['campaigns'] = [char_campaign.to_dict() for char_campaign in self.campaigns]
         return data
