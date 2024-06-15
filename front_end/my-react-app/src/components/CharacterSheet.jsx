@@ -60,14 +60,12 @@ const CharacterSheetApp = ({characterData}) => {
             'Authorization': `Bearer ${token}`
         }
     });
-    
-    if (!response.ok){
-        throw new Error(`HTTP Error (response not ok): ${response}`);
-    }
-
     const data = await response.json();
-    setEligibleCampaigns(data);
-  };
+    if (response.ok) {
+      setEligibleCampaigns(data);
+  } else {
+      console.error('Error fetching campaigns:', data);
+  }};
 
   function updateCharacter (updatedCharacter) {
     setCharacter(updatedCharacter)
