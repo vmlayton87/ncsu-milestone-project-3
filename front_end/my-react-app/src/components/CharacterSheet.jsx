@@ -12,7 +12,7 @@ import Gideon from "../testCharacters/gideon.json";
 //   }
 // }
 
-const CharacterSheetApp = () => {
+const CharacterSheetApp = ({characterData}) => {
 
   const token = getToken();
   const navigate = useNavigate();
@@ -52,9 +52,10 @@ const CharacterSheetApp = () => {
 
   const fetchEligibleCampaigns = async () => {
     
-    const response = await fetch('http://127.0.0.1:5000/campaigns/eligible', {
+    const response = await fetch('http://127.0.0.1:5000/campaigns/eligible/', {
         method: 'GET',
         headers: {
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     });
@@ -94,7 +95,7 @@ const CharacterSheetApp = () => {
       const flattedCharacter = flattenObject(character);
       console.log('flattedCharacter',flattedCharacter);
 
-      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}/`, {
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -128,7 +129,7 @@ const handleAddCharacterToCampaign = async () => {
         body: JSON.stringify({ character_id: characterId, campaign_id: selectedCampaignId })
     });
     const data = await response.json();
-    setMessage(data.message || data.error);
+    // setMessage(data.message || data.error);
     if (response.ok) {
         // Optionally, you could refresh character info or redirect the user
     }
@@ -136,12 +137,17 @@ const handleAddCharacterToCampaign = async () => {
 
   // const [character, setCharacter] = useState<DnDCharacter>(loadDefaultCharacter())
 
-  const statsSheet = (
-    <DnDCharacterStatsSheet
+  const statsSheet = characterData ? (
+      <DnDCharacterStatsSheet
+        character={characterData}
+        onCharacterChanged={updateCharacter}
+      />
+   ) : (
+      <DnDCharacterStatsSheet
       character={character}
       onCharacterChanged={updateCharacter}
     />
-  )
+  );
   
   const addToCampaign = (
     <div>

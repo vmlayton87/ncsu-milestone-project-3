@@ -148,7 +148,7 @@ def add_char_to_camp():
         if character.user_id != user_id:
             return jsonify({"error": "You do not own this character"}), 403
 
-        if campaign.dm == user:
+        if campaign.dm == user.id:
             return jsonify({"error": "You cannot add a character to a campaign you are the DM of"}), 403
 
         if any(char for char in campaign.characters if char.user_id == user_id):
