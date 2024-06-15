@@ -18,12 +18,13 @@ const Dashboard = () => {
     const [allCampaigns, setAllCampaigns] = useState([]);
 
     const navigate = useNavigate();
+    const token = getToken(); 
 
     // fetch all campaigns associated with logged in user
     useEffect(() => {
         const fetchUserCampaigns = async () => {
           try {
-            const token = getToken(); 
+            
             const response = await fetch('http://127.0.0.1:5000/usercamp/', {
               method: 'GET',
               headers: {
@@ -53,7 +54,8 @@ const Dashboard = () => {
             const response = await fetch('http://127.0.0.1:5000/campaigns/', {
               method: 'GET',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
               }
             });
             
@@ -133,7 +135,7 @@ const Dashboard = () => {
     
     
     const handleNewCampaignClick = () => {
-        navigate("/userCampaigns/new");
+        navigate("/campaigns/new");
     }
 
     return (

@@ -15,7 +15,7 @@ char_bp = Blueprint('character', __name__, url_prefix='/characters')
 # ROUTES
 # try except is like try catch, Exception is all the errors, the as a variable helps to do something with the error.
 
-# gets all characters after logging in
+# gets all characters that belong to the logged in user 
 @char_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_chars():
