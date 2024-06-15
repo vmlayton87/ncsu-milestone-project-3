@@ -39,7 +39,9 @@ def get_char_by_id(char_id):
     try:
         user_id = get_jwt_identity()['userId']
         # gets the character based on the user id
-        character = Character.query.filter_by(id=char_id, user_id=user_id).first() 
+        character = Character.query.filter_by(id=char_id).first() 
+        if not character:
+            return jsonify({'error': 'Character not found'}), 404
 
         return jsonify(character.to_dict())
     except Exception as err:

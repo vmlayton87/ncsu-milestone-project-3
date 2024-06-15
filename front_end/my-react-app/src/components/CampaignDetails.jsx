@@ -31,10 +31,10 @@ const CampaignDetails = () => {
   useEffect(() => {
     const fetchCampaignData = async () => {
        // Function to fetch characters based on character_ids
-      async function fetchCharactersByIds(characterIds) {
+      async function fetchCharactersByIds(charIds) {
         // Array to store fetch promises
-        const fetchPromises = await characterIds.map(characterId => {
-          return fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+        const fetchPromises = charIds.map(charId => {
+          return fetch(`http://127.0.0.1:5000/characters/${charId}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -45,20 +45,24 @@ const CampaignDetails = () => {
             if (!response.ok) {
               throw new Error(`HTTP Error: ${response.status}`);
             }
-            return response.json();
+
+            const data = response.json();
+            return data;
           })
           .catch(error => {
-            console.error('Error fetching character:', error.message);
-            return null; 
+            console.error('Error fetching character 2:', error);
+            throw error;
           });
         });
 
         try {
           // Wait for all fetch operations to complete
           const characters = await Promise.all(fetchPromises);
-          return characters.filter(character => character !== null); // Filter out any null values
+          console.log('characters:', characters);//debug
+          return characters;
+          // return characters.filter(character => character !== null); // Filter out any null values
         } catch (error) {
-          console.error('Error fetching characters:', error.message);
+          console.error('Error fetching characters 1:', error.message);
           return [];
         }
       }
@@ -100,6 +104,7 @@ const CampaignDetails = () => {
               return;
             }
             const charactersIds =  fetchedCharacterCampaignTable.map(table => table.character_id);
+            console.log('charactersIds:',charactersIds)//debug
 
 
 
@@ -398,9 +403,9 @@ const CampaignDetails = () => {
                     style={{ backgroundImage: character.image ? `url(${character.image})` : 'url(https://images.pexels.com/photos/3359734/pexels-photo-3359734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
                   >
                     {!character.image && (
-                      <div className="placeholder">
+                      <div className="">
                         <h4 className="card-title">{character.name}</h4>
-                        <p className="card-text">Health: {character.health}</p>
+                        <p className="card-text">Health: {character.hp}</p>
                         <p className="card-text">Armor Class: {character.armorClass}</p>
                         <p className="card-text">Speed: {character.speed}</p>
                         <p className="card-text">Passive Perception: {character.passivePerception}</p>
@@ -409,8 +414,8 @@ const CampaignDetails = () => {
                     {character.image && (
                       <div className="card-body">
                         <h4 className="card-title">{character.name}</h4>
-                        <p className="card-text">Health: {character.health}</p>
-                        <p className="card-text">Armor Class: {character.armorClass}</p>
+                        <p className="card-text">Health: {character.hp}</p>
+                        <p className="card-text">Armor Class: {character.ac}</p>
                         <p className="card-text">Speed: {character.speed}</p>
                         <p className="card-text">Passive Perception: {character.passivePerception}</p>
                       </div>
