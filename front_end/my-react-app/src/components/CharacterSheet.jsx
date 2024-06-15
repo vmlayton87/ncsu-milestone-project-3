@@ -222,7 +222,7 @@ const handleAddCharacterToCampaign = async () => {
           onChange={handleImageUrlChange}
         />
       </Form.Group>
-      <Button onClick={handleUpdateButton} style={{ marginTop: '20px', marginBottom: '20px'}}> Update </Button>
+      <Button onClick={handleUpdateButton} style={{ marginTop: '20px', marginBottom: '60px'}}> Update </Button>
       
     </div>
     
