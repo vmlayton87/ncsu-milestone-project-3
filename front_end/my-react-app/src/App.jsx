@@ -17,7 +17,8 @@ import DmDashboard from './components/DmDashboard.jsx'
 import DiceDrawer from './components/DiceDrawer.jsx'
 import CampaignDetails from './components/CampaignDetails.jsx'
 import { ProtectedRoute, PublicRoute } from './components/protectedRoute.jsx'
-import CharacterSheet from './components/CharacterSheet.jsx'
+// import CharacterSheet from './components/CharacterSheet.jsx'
+import CharacterSheetApp from './components/CharacterSheet.jsx'
 import NewCampaign from './components/NewCampaign.jsx'
 import CreateCharacter from './components/CreateCharacer.jsx'
 
@@ -35,7 +36,7 @@ function App() {
         <Route path="/characters" element={<ProtectedRoute><Characters /></ProtectedRoute>} />
         <Route path="/create-character" element={<ProtectedRoute> <CreateCharacter /> </ProtectedRoute>} />
         <Route path="/campaigns/:id" element={<ProtectedRoute> <CampaignDetails /> </ProtectedRoute>} />
-        <Route path="/character/:id" element={<ProtectedRoute> <CharacterSheet /> </ProtectedRoute>} />
+        <Route path="/character/:id" element={<ProtectedRoute> <CharacterSheetApp /> </ProtectedRoute>} />
         {/* <Route path="/logout" element={() => {
         }} /> */}
       </Routes>
