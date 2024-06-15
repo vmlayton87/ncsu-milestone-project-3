@@ -21,6 +21,7 @@ const CampaignDetails = () => {
   const [playerCharacterSheet, setPlayerCharacterSheet] = useState(null);
   const [characters, setCharacters] = useState([]);
   const [notes, setNotes] = useState([]);
+  const  [fetchedNotes, setFetchedNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [editingNote, setEditingNote] = useState(null);
   const [editedNoteText, setEditedNoteText] = useState('');
@@ -100,6 +101,30 @@ const CampaignDetails = () => {
     fetchCampaignData();
   }, []);
 
+    const fetchNotes = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/notes/${id}`,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+        const data = await response.json();
+        setFetchedNotes(data);
+        console.log('Notes data:',data);//debug
+      } catch (error) {
+        console.log('Error:', error.message);
+      }
+    };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
   // const fetchCampaign = async (campaignId) => {
   //   return {
   //     id: campaignId,
@@ -154,23 +179,15 @@ const CampaignDetails = () => {
   //   };
   // };
 
-  const [singleNote, setSingleNote] = useState({
-    'title': '',
-    'text': '',
-    'user_id':'',
-    'campaign_id':''
-  });
-
   const handleAddNote = () => {
     if (newNote.trim()) {
-      setNotes([...notes, newNote.trim()]);
-      setNewNote(newNote.trim());
-      setSingleNote({
-        'title': '',
-        'text': newNote,
-        'user_id': decodedToken.sub.userId,
-        'campaign_id': id
-      });
+      // setNotes([...notes, newNote.trim()]);
+      // setSingleNote({
+      //   'title': '',
+      //   'text': newNote.trim(),
+      //   'user_id': decodedToken.sub.userId,
+      //   'campaign_id': id
+      // });
         const postNote = async () => {
           try {
             const response = await fetch('http://127.0.0.1:5000/notes/', {
@@ -180,40 +197,78 @@ const CampaignDetails = () => {
                 'Authorization': `Bearer ${token}`
               },
               body: JSON.stringify({
-                'title': singleNote.title,
-                'text': singleNote.text,
-                'user_id': singleNote.user_id,
-                'campaign_id': singleNote.campaign_id
+                'title': '',
+                'text': newNote.trim(),
+                'user_id': decodedToken.sub.userId,
+                'campaign_id': id
               })
             });
+
             if (!response.ok) {
               throw new Error(`HTTP Error: ${response.status}`);
             }
             console.log('Note added successfully');
-            setNewNote('');
           } catch (error) {
             console.log('Error:', error.message);
           }
         }
 
         postNote();
+        setNewNote('');
+        fetchNotes();
+      }else {
+        console.log('Note cannot be empty');
       }
-
-      setNewNote('');
     }
 
-  const handleEditNote = (index) => {
-    setEditingNote(index);
-    setEditedNoteText(notes[index]);
+  const handleEditNote = (noteId) => {
+    const noteToEdit = fetchedNotes.find(note => note.id === noteId);
+    
+    if (noteToEdit) {
+      setEditingNote(noteId);
+      setEditedNoteText(noteToEdit.text);
+    } else {
+      console.log('Note not found');
+    }
+    
   };
 
-  const handleSaveEditedNote = (index) => {
-    const updatedNotes = [...notes];
-    updatedNotes[index] = editedNoteText.trim();
-    setNotes(updatedNotes);
-    setEditingNote(null);
-    setEditedNoteText('');
+  const handleSaveEditedNote = (noteId) => {
+    // const updatedNotes = [...notes];
+    // updatedNotes[noteId] = editedNoteText.trim();
+    // setNotes(updatedNotes);
+
+    const putNote = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/notes/${noteId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            'title': '',
+            'text': editedNoteText.trim(),
+            'user_id': decodedToken.sub.userId,
+            'campaign_id': id
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+        console.log('Note updated successfully');
+        fetchNotes();
+      } catch (error) {
+        console.log('Error:', error.message);
+    }
   };
+
+  putNote();
+
+  setEditingNote(null);
+  setEditedNoteText('');
+}
 
   const handleDeleteNote = (index) => {
     const updatedNotes = notes.filter((_, noteIndex) => noteIndex !== index);
@@ -282,21 +337,21 @@ const CampaignDetails = () => {
           <div className="saved-notes">
             <h4>Saved Notes</h4>
             <ul>
-              {notes.map((note, index) => (
-                <li key={index}>
-                  {editingNote === index ? (
+              {fetchedNotes.map((note) => (
+                <li key={note.id}>
+                  {editingNote === note.id ? (
                     <>
                       <textarea
                         value={editedNoteText}
                         onChange={(e) => setEditedNoteText(e.target.value)}
                       />
-                      <button onClick={() => handleSaveEditedNote(index)}>Save</button>
+                      <button onClick={() => handleSaveEditedNote(note.id)}>Save</button>
                     </>
                   ) : (
                     <>
-                      <p>{note}</p>
-                      <button onClick={() => handleEditNote(index)}>Edit</button>
-                      <button onClick={() => handleDeleteNote(index)}>Delete</button>
+                      <p>{note.text}</p>
+                      <button onClick={() => handleEditNote(note.id)}>Edit</button>
+                      <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
                     </>
                   )}
                 </li>

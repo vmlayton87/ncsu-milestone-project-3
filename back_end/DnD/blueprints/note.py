@@ -26,6 +26,18 @@ def get_notes():
         print(f"Error: {err}")
         return jsonify({'error': 'Failed to retrieve notes'}), 500
     
+#Get notes belongs to a campaign
+@note_bp.route('/<int:campaign_id>', methods=['GET'])
+# get all notes and turn it in a json object
+def get_campaign_notes(campaign_id):
+    try:
+        results = Note.query.filter_by(campaign_id=campaign_id).all()
+        note_data = [result.to_dict() for result in results]
+        return jsonify(note_data)
+    except Exception as err:
+        print(f"Error: {err}")
+        return jsonify({'error': 'Failed to retrieve notes'}), 500
+    
 
 # POST route
 @note_bp.route('/', methods=['POST'])
@@ -45,7 +57,7 @@ def new_note():
 # PUT route
 @note_bp.route('/<int:note_id>', methods=['PUT'])
 # update a note
-def update_note():
+def update_note(note_id):
     data = request.get_json() #get_json gets the json request.
     note = Note.query.get(note_id)
     try:
