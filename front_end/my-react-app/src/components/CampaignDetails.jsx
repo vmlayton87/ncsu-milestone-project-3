@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { getToken } from "../utils/auth"
 import { jwtDecode } from "jwt-decode"
 import CharacterSheet from "./CharacterSheet.jsx"
+import CharacterSheetApp from "./CharacterSheet.jsx"
 import '../index.scss'
 
 // Steps to implement dm/player view:
@@ -19,6 +20,7 @@ const CampaignDetails = () => {
   const [campaign, setCampaign] = useState(null);
   const [isDungeonMaster, setIsDungeonMaster] = useState(false);
   const [playerCharacterSheet, setPlayerCharacterSheet] = useState(null);
+  const [noCharacterInCampaign, setNoCharacterInCampaign] = useState(false);
   const [characters, setCharacters] = useState([]);
   const [notes, setNotes] = useState([]);
   const  [fetchedNotes, setFetchedNotes] = useState([]);
@@ -28,6 +30,39 @@ const CampaignDetails = () => {
 
   useEffect(() => {
     const fetchCampaignData = async () => {
+       // Function to fetch characters based on character_ids
+      async function fetchCharactersByIds(characterIds) {
+        // Array to store fetch promises
+        const fetchPromises = await characterIds.map(characterId => {
+          return fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP Error: ${response.status}`);
+            }
+            return response.json();
+          })
+          .catch(error => {
+            console.error('Error fetching character:', error.message);
+            return null; 
+          });
+        });
+
+        try {
+          // Wait for all fetch operations to complete
+          const characters = await Promise.all(fetchPromises);
+          return characters.filter(character => character !== null); // Filter out any null values
+        } catch (error) {
+          console.error('Error fetching characters:', error.message);
+          return [];
+        }
+      }
+      //function ends here//
 
       try {
         const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}`, {
@@ -42,6 +77,7 @@ const CampaignDetails = () => {
         }
 
         const campaignData = await response.json();
+        console.log('campaign', campaignData)//debug
         setCampaign(campaignData);
 
         if (campaignData.dm === decodedToken.sub.userId) {
@@ -57,15 +93,31 @@ const CampaignDetails = () => {
             if (!response.ok) {
               throw new Error(`HTTP Error: ${response.status}`);
             }
-            const fetchedCharacters = await response.json();
-            setCharacters(fetchedCharacters);
-            console.log('dm1:',campaignData.dm)//debug
+            const fetchedCharacterCampaignTable = await response.json();
+            if (fetchedCharacterCampaignTable.length === 0) {
+              console.log('No player character found in DM view');
+              setNoCharacterInCampaign(true);
+              return;
+            }
+            const charactersIds =  fetchedCharacterCampaignTable.map(table => table.character_id);
+
+
+
+           const fetchedCharacters = await fetchCharactersByIds(charactersIds);
+           
+           
+
+           setCharacters(fetchedCharacters);
+           console.log('fetchedCharacters:',fetchedCharacters)//debug
+
+           console.log('dm1:',campaignData.dm)//debug
           } catch (error) {
             console.log('Error:', error.message);
           }
           
         } else {
           setIsDungeonMaster(false);
+
           try {
             const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}/characters`, {
               method: 'GET',
@@ -77,12 +129,46 @@ const CampaignDetails = () => {
             if (!response.ok) {
               throw new Error(`HTTP Error: ${response.status}`);
             }
-            const fetchedCharacters = await response.json();
-            const playerCharacter = fetchedCharacters.find(character => character.user.id === decodedToken.sub.userId);
-            setPlayerCharacterSheet(playerCharacter);
+            const fetchedCharacterCampaignTable = await response.json();
+            console.log('fetchedCharacterCampaignTable',fetchedCharacterCampaignTable)//debug
+            if (fetchedCharacterCampaignTable.length === 0 || fetchedCharacterCampaignTable[0].character_id === null) {
+              console.log('No player character found in player view');
+              setNoCharacterInCampaign(true);
+              return;
+            } 
+            const playerCharacterId = fetchedCharacterCampaignTable[0].character_id;
+            
+            
 
-            console.log('playerCharacter',playerCharacter);//debug
-            console.log('fetchedCharacters',fetchedCharacters);//debug
+            const fetchPlayerCharacter = async () => {
+              try {
+                const response = await fetch(`http://127.0.0.1:5000/characters/${playerCharacterId}`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+
+                if (!response.ok) {
+                  throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const playerCharacter = await response.json();
+                delete playerCharacter.campaigns;
+                console.log('playerCharacter',playerCharacter);//debug
+
+                return playerCharacter;
+
+              } catch (error) {
+                  console.log('Error:', error.message);
+              }
+            } 
+
+            const playerCharacterSheetData1 = await fetchPlayerCharacter();
+            setPlayerCharacterSheet(playerCharacterSheetData1);
+            
+            console.log('playerCharacterSheetData',playerCharacterSheet)// debug
             console.log('dm2:',campaignData.dm)//debug
 
 
@@ -90,11 +176,11 @@ const CampaignDetails = () => {
             // setPlayerCharacterSheet(playerCharacter);
             // setNotes(playerCharacter.notes || []);
           } catch (error) {
-            console.log('Error:', error.message);
+            console.log('Error1:', error);
           }
         }
       } catch (error) {
-        console.log('Error:', error.message);
+        console.log('Error2:', error.message);
       }
     };
 
@@ -103,7 +189,7 @@ const CampaignDetails = () => {
 
     const fetchNotes = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/notes/${id}`,{
+        const response =  await fetch(`http://127.0.0.1:5000/notes/${id}`,{
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -113,7 +199,7 @@ const CampaignDetails = () => {
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
         }
-        const data = await response.json();
+        const data =  await response.json();
         setFetchedNotes(data);
         console.log('Notes data:',data);//debug
       } catch (error) {
@@ -181,16 +267,9 @@ const CampaignDetails = () => {
 
   const handleAddNote = () => {
     if (newNote.trim()) {
-      // setNotes([...notes, newNote.trim()]);
-      // setSingleNote({
-      //   'title': '',
-      //   'text': newNote.trim(),
-      //   'user_id': decodedToken.sub.userId,
-      //   'campaign_id': id
-      // });
-        const postNote = async () => {
+        const postNote = () => {
           try {
-            const response = await fetch('http://127.0.0.1:5000/notes/', {
+            const response = fetch('http://127.0.0.1:5000/notes/', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -305,39 +384,51 @@ const CampaignDetails = () => {
       <div className="details-container">
         {isDungeonMaster ? (
           <>
-            <h3>Character Sheets</h3>
-            <div className="character-snapshots">
-              {characters.map((character) => (
-                <div
-                  key={character.id}
-                  className="character-snapshot card"
-                  onClick={() => handleCharacterClick(character.id)}
-                  style={{ backgroundImage: character.image ? `url(${character.image})` : 'url(https://images.pexels.com/photos/3359734/pexels-photo-3359734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
-                >
-                  {!character.image && (
-                    <div className="placeholder">
-                      <h4 className="card-title">{character.name}</h4>
-                      <p className="card-text">Health: {character.health}</p>
-                      <p className="card-text">Armor Class: {character.armorClass}</p>
-                      <p className="card-text">Speed: {character.speed}</p>
-                      <p className="card-text">Passive Perception: {character.passivePerception}</p>
-                    </div>
-                  )}
-                  {character.image && (
-                    <div className="card-body">
-                      <h4 className="card-title">{character.name}</h4>
-                      <p className="card-text">Health: {character.health}</p>
-                      <p className="card-text">Armor Class: {character.armorClass}</p>
-                      <p className="card-text">Speed: {character.speed}</p>
-                      <p className="card-text">Passive Perception: {character.passivePerception}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {noCharacterInCampaign ? (
+              <p>Dear Dungeon Master. Welsome to the campaign detail page. There is no characters in this campaign yet. Please wait for players to join in.</p>
+            ) : (
+              <>
+              <h3>Character Sheets</h3>
+              <div className="character-snapshots">
+                {characters.map((character) => (
+                  <div
+                    key={character.id}
+                    className="character-snapshot card"
+                    onClick={() => handleCharacterClick(character.id)}
+                    style={{ backgroundImage: character.image ? `url(${character.image})` : 'url(https://images.pexels.com/photos/3359734/pexels-photo-3359734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
+                  >
+                    {!character.image && (
+                      <div className="placeholder">
+                        <h4 className="card-title">{character.name}</h4>
+                        <p className="card-text">Health: {character.health}</p>
+                        <p className="card-text">Armor Class: {character.armorClass}</p>
+                        <p className="card-text">Speed: {character.speed}</p>
+                        <p className="card-text">Passive Perception: {character.passivePerception}</p>
+                      </div>
+                    )}
+                    {character.image && (
+                      <div className="card-body">
+                        <h4 className="card-title">{character.name}</h4>
+                        <p className="card-text">Health: {character.health}</p>
+                        <p className="card-text">Armor Class: {character.armorClass}</p>
+                        <p className="card-text">Speed: {character.speed}</p>
+                        <p className="card-text">Passive Perception: {character.passivePerception}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              </>
+            )}
           </>
-        ) : (
-          <CharacterSheet character={playerCharacterSheet} />
+        ): (
+          <>
+            {noCharacterInCampaign ? (
+              <p>Dear player. Welsome to the campaign detail page. There is no characters in this campaign yet. You can add a character to this campaign in the character sheet.</p>
+            ) : (
+              <CharacterSheetApp characterData={playerCharacterSheet} />
+            )}
+          </>
         )}
 
         {/* following is the notes section */}
