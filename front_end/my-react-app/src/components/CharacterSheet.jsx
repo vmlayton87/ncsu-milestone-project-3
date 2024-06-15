@@ -17,35 +17,53 @@ const CharacterSheetApp = () => {
   const token = getToken();
   const navigate = useNavigate();
 
-  const characterId = useParams();
-  const characterIdString = characterId.id;
-
-  const [character, setCharacter] = useState({
-    name:''
-  });
+  const characterIdObject = useParams();
+  const characterId = characterIdObject.id;
+  
+  const [character, setCharacter] = useState({});
+  const [eligibleCampaigns, setEligibleCampaigns] = useState([]);
+  const [selectedCampaignId, setSelectedCampaignId] = useState('');
+  // const [password, setPassword] = useState('');
 
   useEffect(() => {
-    // Simulate fetching data
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:5000/characters/${characterIdString}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
-        }
-        const returnedCharacter = await response.json();
-        setCharacter(returnedCharacter);
-      } catch (error) {
-        console.log('Error:',error.message);
-      }
-    };
-    fetchData();
+    fetchCharacterData();
+    fetchEligibleCampaigns();
   }, []);
+
+  // fetch single character
+  const fetchCharacterData = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      const returnedCharacter = await response.json();
+      setCharacter(returnedCharacter);
+    } catch (error) {
+      console.log('Error:',error.message);
+    }
+  };
+
+  const fetchEligibleCampaigns = async () => {
+    
+    const response = await fetch('http://127.0.0.1:5000/campaigns/eligible', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const data = await response.json();
+    if (response.ok) {
+      setEligibleCampaigns(data);
+  } else {
+      console.error('Error fetching campaigns:', data);
+  }};
 
   function updateCharacter (updatedCharacter) {
     setCharacter(updatedCharacter)
@@ -76,7 +94,7 @@ const CharacterSheetApp = () => {
       const flattedCharacter = flattenObject(character);
       console.log('flattedCharacter',flattedCharacter);
 
-      const response = await fetch(`http://127.0.0.1:5000/characters/${characterIdString}`, {
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -96,6 +114,25 @@ const CharacterSheetApp = () => {
       console.log('Error:', error);
     }
   };
+  
+
+// adds character to selected campaign
+const handleAddCharacterToCampaign = async () => {
+    
+    const response = await fetch(`http://127.0.0.1:5000/characters/addToCampaign`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ character_id: characterId, campaign_id: selectedCampaignId })
+    });
+    const data = await response.json();
+    setMessage(data.message || data.error);
+    if (response.ok) {
+        // Optionally, you could refresh character info or redirect the user
+    }
+};
 
   // const [character, setCharacter] = useState<DnDCharacter>(loadDefaultCharacter())
 
@@ -105,6 +142,26 @@ const CharacterSheetApp = () => {
       onCharacterChanged={updateCharacter}
     />
   )
+  
+  const addToCampaign = (
+    <div>
+      <label htmlFor="campaign">Add Character to Campaign:</label>
+      <select
+        id="campaign"
+        value={selectedCampaignId}
+        onChange={(e) => setSelectedCampaignId(e.target.value)}
+      >
+        <option value="">-- Select --</option>
+        {eligibleCampaigns.map((campaign) => (
+          <option key={campaign.id} value={campaign.id}>
+            {campaign.name}
+          </option>
+        ))}
+      </select>
+      <button onClick={handleAddCharacterToCampaign}>Add to Campaign</button>
+    </div>
+  )
+  
 
   // function loadDefaultCharacter () {
   //   let character = {}
@@ -137,6 +194,7 @@ const CharacterSheetApp = () => {
   // }
   return (
     <div className="character-sheet-container">
+      {addToCampaign}
       {statsSheet}
       <Form.Group controlId="image">
         <Form.Label>Image URL</Form.Label>
@@ -147,7 +205,7 @@ const CharacterSheetApp = () => {
           onChange={handleImageUrlChange}
         />
       </Form.Group>
-      <Button onClick={handleUpdateButton} style={{ marginTop: '20px' }}> Update </Button>
+      <Button onClick={handleUpdateButton} style={{ marginTop: '20px', marginBottom: '20px'}}> Update </Button>
     </div>
     
   );

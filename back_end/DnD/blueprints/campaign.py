@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # import the model for this blueprint
-from ..models import Campaign, User
+from ..models import Campaign, User, UserCampaigns
 
 # import database
 from ..config import db
@@ -51,6 +51,36 @@ def create_character(campaign_id):
     except Exception as err:
         print(f"Error: {err}")
         return jsonify({'error': 'Failed to create character'}), 500
+
+# Route to fetch all campaigns the user is a part of but not the DM of
+@campaign_bp.route('/eligible', methods=['GET'])
+@jwt_required()
+def get_eligible_campaigns():
+
+    user_id = get_jwt_identity()['userId']
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "user not found"}), 404
+
+    #creates an empty list to append eligible campaigns for a character to be added to
+    eligible_campaigns = []
+
+    print('testing what user.campaigns looks like: ', user.campaigns) 
+
+    for user_campaign in user.campaigns:
+        campaign = user_campaign.campaign
+
+        # if campaign DM is not the user, and there are no characters in the campaign that belong to the user
+        print('testing what campaign looks like: ', campaign.to_dict()) # <UserCampaigns 4, 7>
+        
+        if campaign.dm != user_id and not any(character for character in campaign.characters if character.user_id == user_id):
+            eligible_campaigns.append(campaign.to_dict()) # add each campaign info to the list
+
+    return jsonify(eligible_campaigns)
+
+
+
+
 
 # GET route
 @campaign_bp.route('/', methods=['GET'])
