@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -15,10 +16,35 @@ const Login = () => {
             [name]: value
         })
     }
-    const handleSubmit = (e) => {
+
+    const navigate = useNavigate();
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
-        console.log(formData)
+        try {
+            const response = await fetch('http://127.0.0.1:5000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            
+            if (data.error){
+                console.log('Error: ', data.error);
+                alert('Error:', data.error);
+            } else {
+                localStorage.setItem('jwt_token', data.access_token);
+                console.log('Success: Login successfully');
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            alert('Error: ', error);
+            console.log('Error:', error);
+        }
+       
     }
 
     return (

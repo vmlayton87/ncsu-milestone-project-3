@@ -1,0 +1,74 @@
+cd into back_end:
+Make sure you have your postgres env variable set up: DB_CONNECTION
+Add in a JWT secret code: JWT_SECRET_KEY=abc123
+
+to create the environment: 
+    py -m venv venv
+
+to activate the environment: 
+    . venv/Scripts/activate
+
+install all dependencies:
+    pip install -r requirements.txt
+
+To run the program and create the tables in the database:
+    flask db init
+
+    flask db migrate -m "Initial migration."
+
+    flask db upgrade
+
+to run the backend 
+    flask run --reload
+
+close flask 
+    CRTL + c
+deactivate venv
+    deactivate
+
+
+
+
+
+
+
+
+
+then install flask: 
+    pip install Flask psycopg2-binary
+install SQL-Alchemy
+    pip install -U Flask-SQLAlchemy
+install python dotenv
+    pip install python-dotenv
+install Flask Migrate
+    pip install Flask-Migrate
+install Flask-JWT-Extended
+    pip install Flask-JWT-Extended
+install flask Cors
+    pip install Flask-Cors
+install flask bcrypt
+    pip install Flask-Bcrypt
+
+  
+then run flask:
+    flask run --reload
+close flask 
+    CRTL + c
+deactivate venv
+    deactivate
+
+for development:
+to activate the environment: 
+    . venv/Scripts/activate
+then run flask:
+    flask run --reload
+close flask 
+    CRTL + c
+deactivate venv
+    deactivate
+
+
+To run the program and create the tables in the database:
+    flask db init
+    flask db migrate -m "Initial migration."
+    flask db upgrade
