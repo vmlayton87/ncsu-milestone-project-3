@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import { getToken } from "../utils/auth";
 import { DnDCharacterStatsSheet, DnDCharacter } from 'dnd-character-sheets';
@@ -12,10 +12,11 @@ import Gideon from "../testCharacters/gideon.json";
 //   }
 // }
 
-const CharacterSheetApp = () => {
+const CharacterSheetApp = ({characterData}) => {
 
   const token = getToken();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const characterIdObject = useParams();
   const characterId = characterIdObject.id;
@@ -55,6 +56,7 @@ const CharacterSheetApp = () => {
     const response = await fetch('http://127.0.0.1:5000/campaigns/eligible', {
         method: 'GET',
         headers: {
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     });
@@ -94,7 +96,7 @@ const CharacterSheetApp = () => {
       const flattedCharacter = flattenObject(character);
       console.log('flattedCharacter',flattedCharacter);
 
-      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}/`, {
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -128,20 +130,26 @@ const handleAddCharacterToCampaign = async () => {
         body: JSON.stringify({ character_id: characterId, campaign_id: selectedCampaignId })
     });
     const data = await response.json();
-    setMessage(data.message || data.error);
+    console.log(data);//debug
+    // setMessage(data.message || data.error);
     if (response.ok) {
-        // Optionally, you could refresh character info or redirect the user
+        navigate('/characters');
     }
 };
 
   // const [character, setCharacter] = useState<DnDCharacter>(loadDefaultCharacter())
 
-  const statsSheet = (
-    <DnDCharacterStatsSheet
+  const statsSheet = characterData ? (
+      <DnDCharacterStatsSheet
+        character={characterData}
+        onCharacterChanged={updateCharacter}
+      />
+   ) : (
+      <DnDCharacterStatsSheet
       character={character}
       onCharacterChanged={updateCharacter}
     />
-  )
+  );
   
   const addToCampaign = (
     <div>
@@ -194,18 +202,28 @@ const handleAddCharacterToCampaign = async () => {
   // }
   return (
     <div className="character-sheet-container">
-      {addToCampaign}
-      {statsSheet}
+      {location.pathname.includes('/campaigns') ? (
+        <>
+          {statsSheet}
+        </>
+      ): (
+        <>
+        {addToCampaign}
+        {statsSheet}
+        </>
+      )}
+
       <Form.Group controlId="image">
         <Form.Label>Image URL</Form.Label>
         <Form.Control
           type="text"
           placeholder="Enter character image URL"
-          value={character.image}
+          value={character.image || ''}
           onChange={handleImageUrlChange}
         />
       </Form.Group>
       <Button onClick={handleUpdateButton} style={{ marginTop: '20px', marginBottom: '20px'}}> Update </Button>
+      
     </div>
     
   );
