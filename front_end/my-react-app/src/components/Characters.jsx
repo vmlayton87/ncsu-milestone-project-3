@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 const Characters = () => {
   const [characters, setCharacters] = useState([]);
   const navigate = useNavigate();
-  const { id } = useParams();
+  // const characterId = useParams();
   const [error, setError] = useState(null);
   const token = getToken();
 
@@ -38,6 +38,27 @@ const Characters = () => {
     navigate(`/character/${characterId}`)
   };
 
+  const handleDelete = async (characterId) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      // Optionally handle success, e.g., show a message or redirect
+      navigate('/characters');
+      console.log('Character deleted successfully');
+    } catch (error) {
+      console.log('Error:', error.message);
+    }
+  };
+
+
   return (
     <div className="characters-page">
       <h2>Your Characters</h2>
@@ -52,7 +73,7 @@ const Characters = () => {
             key={character.id}
             className="character-card"
             onClick={() => handleCharacterClick(character.id)}
-            style={{ backgroundImage: character.image ? `url(${character.image})` : 'none' }}
+            style={{ backgroundImage: character.image ? `url(${character.image})` : 'url(https://images.pexels.com/photos/3359734/pexels-photo-3359734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
           >
             {!character.image && (
               <div className="placeholder">
@@ -67,17 +88,7 @@ const Characters = () => {
               </div>
             )}
             <div className="button-group">
-              <Button variant="secondary" onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/edit-character/${character.id}`);
-              }}>
-                Edit
-              </Button>
-              <Button variant="danger" onClick={(e) => {
-                e.stopPropagation();
-                // Placeholder for delete API call
-                console.log(`Delete character with ID ${character.id}`);
-              }}>
+              <Button variant="danger" onClick={() => handleDelete(character.id)}>
                 Delete
               </Button>
             </div>

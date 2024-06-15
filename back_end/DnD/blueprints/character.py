@@ -1,6 +1,7 @@
 # blueprint/routes for the note table
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy.exc import SQLAlchemyError
 
 # import the model for this blueprint
 from ..models import Character, User
@@ -31,7 +32,7 @@ def get_chars():
         return jsonify({'error': 'Failed to retrieve characters'}), 500
     
 
-# gets character by id
+# gets a character by id
 @char_bp.route('/<int:char_id>', methods=['GET'])
 @jwt_required()
 def get_char_by_id(char_id):
@@ -42,6 +43,57 @@ def get_char_by_id(char_id):
         print(f"Error: {err}")
         return jsonify({'error': 'Failed to retrieve characters'}), 500
 
+# updates a character by id
+@char_bp.route('/<int:char_id>', methods=['PUT'])
+@jwt_required()
+def update_char_by_id(char_id):
+    try:
+        character = Character.query.get(char_id)
+        if not character:
+            return jsonify({'error': 'Character not found'}), 404
+
+        # Get the JSON data from the request
+        data = request.get_json()
+
+        # Update the character fields based on flattened keys
+        for key, value in data.items():
+            if hasattr(character, key):
+                setattr(character, key, value)
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        return jsonify(character.to_dict()), 200
+
+    except SQLAlchemyError as err:
+        print(f"SQLAlchemy Error: {err}")
+        return jsonify({'error': 'Failed to update character'}), 500
+    except Exception as err:
+        print(f"Error: {err}")
+        return jsonify({'error': 'An error occurred'}), 500
+    
+
+# deletes a character by id
+@char_bp.route('/<int:char_id>', methods=['DELETE'])
+@jwt_required()
+def delete_char_by_id(char_id):
+    try:
+        character = Character.query.get(char_id)
+        if character:
+            # Delete the character from the database
+            db.session.delete(character)
+            db.session.commit()
+            return jsonify({'message': 'Character deleted successfully'}), 200
+        else:
+            return jsonify({'error': 'Character not found'}), 404
+
+    except SQLAlchemyError as err:
+        db.session.rollback()
+        print(f"Error: {err}")
+        return jsonify({'error': 'Failed to delete character'}), 500
+    except Exception as err:
+        print(f"Error: {err}")
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 # create character after logging in
 @char_bp.route('/', methods=['POST'])

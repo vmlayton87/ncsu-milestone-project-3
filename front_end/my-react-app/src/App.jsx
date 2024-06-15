@@ -36,8 +36,8 @@ function App() {
         <Route path="/create-character" element={<ProtectedRoute> <CreateCharacter /> </ProtectedRoute>} />
         <Route path="/campaigns/:id" element={<ProtectedRoute> <CampaignDetails /> </ProtectedRoute>} />
         <Route path="/character/:id" element={<ProtectedRoute> <CharacterSheet /> </ProtectedRoute>} />
-        <Route path="/logout" element={() => {
-        }} />
+        {/* <Route path="/logout" element={() => {
+        }} /> */}
       </Routes>
       {location.pathname !=='/' && <DiceDrawer />}
     </Router>
