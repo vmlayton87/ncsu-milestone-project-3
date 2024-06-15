@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 const Characters = () => {
   const [characters, setCharacters] = useState([]);
   const navigate = useNavigate();
-  const { id } = useParams();
+  // const characterId = useParams();
   const [error, setError] = useState(null);
   const token = getToken();
 
@@ -35,16 +35,37 @@ const Characters = () => {
   }, []);
 
   const handleCharacterClick = (characterId) => {
-    navigate(`/character/${characterId}`); // Navigate to the character sheet view
+    navigate(`/character/${characterId}`)
   };
+
+  const handleDelete = async (characterId) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      // Optionally handle success, e.g., show a message or redirect
+      navigate('/characters');
+      console.log('Character deleted successfully');
+    } catch (error) {
+      console.log('Error:', error.message);
+    }
+  };
+
 
   return (
     <div className="characters-page">
       <h2>Your Characters</h2>
       <div className="button-container">
-      <Button variant="primary" onClick={() => navigate('/create-character')}>
-        Create New Character
-      </Button>
+        <Button variant="primary" onClick={() => navigate('/create-character')}>
+          Create New Character
+        </Button>
       </div>
       <div className="character-list">
         {characters.map((character) => (
@@ -52,25 +73,31 @@ const Characters = () => {
             key={character.id}
             className="character-card"
             onClick={() => handleCharacterClick(character.id)}
-            style={{ backgroundImage: character.image ? `url(${character.image})` : 'none' }}
+            style={{ backgroundImage: character.image ? `url(${character.image})` : 'url(https://images.pexels.com/photos/3359734/pexels-photo-3359734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
           >
             {!character.image && (
               <div className="placeholder">
                 <h4>{character.name}</h4>
-                <p>{character.class} - Level {character.level}</p>
+                <p>{character.race} - {character.class} - Level {character.level}</p>
               </div>
             )}
             {character.image && (
               <div className="card-body">
                 <h4>{character.name}</h4>
-                <p>{character.class} - Level {character.level}</p>
+                <p>{character.race} - {character.class} - Level {character.level}</p>
               </div>
             )}
+            <div className="button-group">
+              <Button variant="danger" onClick={() => handleDelete(character.id)}>
+                Delete
+              </Button>
+            </div>
           </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+
+}
 
 export default Characters;

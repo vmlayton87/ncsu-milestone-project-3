@@ -1,47 +1,138 @@
-import React, { Component, useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { Component, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button, Form } from 'react-bootstrap';
 import { getToken } from "../utils/auth";
-import { DnDCharacterStatsSheet, DnDCharacter } from 'dnd-character-sheets'
-import 'dnd-character-sheets/dist/index.css'
-import Gideon from "../testCharacters/gideon.json"
+import { DnDCharacterStatsSheet, DnDCharacter } from 'dnd-character-sheets';
+import 'dnd-character-sheets/dist/index.css';
+import Gideon from "../testCharacters/gideon.json";
 
-class CharacterSheet extends Component {
-  render() {
-    return <DnDCharacterStatsSheet character={Gideon}/>
-  }
-}
+// class CharacterSheet extends Component {
+//   render() {
+//     return <DnDCharacterStatsSheet character={Gideon}/>
+//   }
+// }
 
 const CharacterSheetApp = () => {
 
   const token = getToken();
+  const navigate = useNavigate();
 
-  const characterId = useParams();
-  const characterIdString = characterId.id;
-
+  const characterIdObject = useParams();
+  const characterId = characterIdObject.id;
+  
   const [character, setCharacter] = useState({});
+  const [eligibleCampaigns, setEligibleCampaigns] = useState([]);
+  const [selectedCampaignId, setSelectedCampaignId] = useState('');
+  // const [password, setPassword] = useState('');
 
   useEffect(() => {
-    // Simulate fetching data
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:5000/characters/${characterIdString}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
-        }
-        const returnedCharacter = await response.json();
-        setCharacter(returnedCharacter);
-      } catch (error) {
-        console.log('Error:',error.message);
-      }
-    };
-    fetchData();
+    fetchCharacterData();
+    fetchEligibleCampaigns();
   }, []);
+
+  // fetch single character
+  const fetchCharacterData = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      const returnedCharacter = await response.json();
+      setCharacter(returnedCharacter);
+    } catch (error) {
+      console.log('Error:',error.message);
+    }
+  };
+
+  const fetchEligibleCampaigns = async () => {
+    
+    const response = await fetch('http://127.0.0.1:5000/campaigns/eligible', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const data = await response.json();
+    if (response.ok) {
+      setEligibleCampaigns(data);
+  } else {
+      console.error('Error fetching campaigns:', data);
+  }};
+
+  function updateCharacter (updatedCharacter) {
+    setCharacter(updatedCharacter)
+    // localStorage.setItem('dnd-character-data', JSON.stringify(character))
+  }
+
+  const handleImageUrlChange = (e) => {
+    setCharacter({ ...character, image: e.target.value });
+  };
+
+  // Function to flatten the updatedCharacter object
+  const flattenObject = (obj, result = {}) => {
+    for (let key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          flattenObject(obj[key], result);
+        } else {
+          result[key] = obj[key];
+        }
+      }
+    }
+    return result;
+  };
+
+  const handleUpdateButton = async () => {
+    try {
+
+      const flattedCharacter = flattenObject(character);
+      console.log('flattedCharacter',flattedCharacter);
+
+      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}/`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(flattedCharacter)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Character updated successfully:', data);
+      navigate('/characters');
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+  
+
+// adds character to selected campaign
+const handleAddCharacterToCampaign = async () => {
+    
+    const response = await fetch(`http://127.0.0.1:5000/characters/addToCampaign`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ character_id: characterId, campaign_id: selectedCampaignId })
+    });
+    const data = await response.json();
+    setMessage(data.message || data.error);
+    if (response.ok) {
+        // Optionally, you could refresh character info or redirect the user
+    }
+};
 
   // const [character, setCharacter] = useState<DnDCharacter>(loadDefaultCharacter())
 
@@ -51,6 +142,26 @@ const CharacterSheetApp = () => {
       onCharacterChanged={updateCharacter}
     />
   )
+  
+  const addToCampaign = (
+    <div>
+      <label htmlFor="campaign">Add Character to Campaign:</label>
+      <select
+        id="campaign"
+        value={selectedCampaignId}
+        onChange={(e) => setSelectedCampaignId(e.target.value)}
+      >
+        <option value="">-- Select --</option>
+        {eligibleCampaigns.map((campaign) => (
+          <option key={campaign.id} value={campaign.id}>
+            {campaign.name}
+          </option>
+        ))}
+      </select>
+      <button onClick={handleAddCharacterToCampaign}>Add to Campaign</button>
+    </div>
+  )
+  
 
   // function loadDefaultCharacter () {
   //   let character = {}
@@ -62,11 +173,6 @@ const CharacterSheetApp = () => {
   //   }
   //   return character
   // }
-
-  function updateCharacter (character) {
-    setCharacter(character)
-    localStorage.setItem('dnd-character-data', JSON.stringify(character))
-  }
 
   // function exportCharacter () {
   //   const json = JSON.stringify(character, null, 2)
@@ -88,8 +194,20 @@ const CharacterSheetApp = () => {
   // }
   return (
     <div className="character-sheet-container">
+      {addToCampaign}
       {statsSheet}
+      <Form.Group controlId="image">
+        <Form.Label>Image URL</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter character image URL"
+          value={character.image}
+          onChange={handleImageUrlChange}
+        />
+      </Form.Group>
+      <Button onClick={handleUpdateButton} style={{ marginTop: '20px', marginBottom: '20px'}}> Update </Button>
     </div>
+    
   );
 }
 
