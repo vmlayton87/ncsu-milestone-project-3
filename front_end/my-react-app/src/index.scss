@@ -386,7 +386,7 @@ html, body {
   .button-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px; // Adjust this value to your desired spacing
+    margin-bottom: 20px;
   }
 
   .character-list {
@@ -621,6 +621,7 @@ html, body {
   .button-container {
     display: flex;
     justify-content: center;
+    margin-top: 20px;
     margin-bottom: 20px;
     padding-bottom: 20px;
   }
