@@ -23,7 +23,7 @@ def create_app():
     
     #Enable CORS
     # CORS(app)
-    CORS(app, origins = ['http://localhost:5173'], methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allow_headers=['Content-Type', 'Authorization'], supports_credentials=True)
+    CORS(app, origins = ['http://localhost:5173', 'https://ncsu-milestone-project-3.onrender.com'], methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allow_headers=['Content-Type', 'Authorization'], supports_credentials=True)
 
 
     bcrypt = Bcrypt(app)
