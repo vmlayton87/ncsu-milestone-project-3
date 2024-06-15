@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { getToken } from "../utils/auth"
+import { jwtDecode } from "jwt-decode"
 import CharacterSheet from "./CharacterSheet.jsx"
 import '../index.scss'
 
@@ -11,6 +13,8 @@ import '../index.scss'
 
 const CampaignDetails = () => {
   const { id } = useParams();
+  const token = getToken();
+  const decodedToken = jwtDecode(token);
   const navigate = useNavigate();
   const [campaign, setCampaign] = useState(null);
   const [isDungeonMaster, setIsDungeonMaster] = useState(false);
@@ -23,76 +27,132 @@ const CampaignDetails = () => {
 
   useEffect(() => {
     const fetchCampaignData = async () => {
-      const campaignData = await fetchCampaign(id); // Replace with actual API call
-      setCampaign(campaignData);
-      setIsDungeonMaster(campaignData.isDungeonMaster);
 
-      if (campaignData.isDungeonMaster) {
-        const fetchedCharacters = await fetchAllCharactersForCampaign(id); // Replace with actual API call
-        setCharacters(fetchedCharacters);
-      } else {
-        const playerCharacter = await fetchPlayerCharacterForCampaign(id); // Replace with actual API call
-        setPlayerCharacterSheet(playerCharacter);
-        setNotes(playerCharacter.notes || []);
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const campaignData = await response.json();
+        setCampaign(campaignData);
+
+        if (campaignData.dm === decodedToken.sub.userId) {
+          setIsDungeonMaster(true);
+          try {
+            const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}/characters`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            if (!response.ok) {
+              throw new Error(`HTTP Error: ${response.status}`);
+            }
+            const fetchedCharacters = await response.json();
+            setCharacters(fetchedCharacters);
+            console.log('dm1:',campaignData.dm)//debug
+          } catch (error) {
+            console.log('Error:', error.message);
+          }
+          
+        } else {
+          setIsDungeonMaster(false);
+          try {
+            const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}/characters`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            if (!response.ok) {
+              throw new Error(`HTTP Error: ${response.status}`);
+            }
+            const fetchedCharacters = await response.json();
+            const playerCharacter = fetchedCharacters.find(character => character.user.id === decodedToken.sub.userId);
+            setPlayerCharacterSheet(playerCharacter);
+
+            console.log('playerCharacter',playerCharacter);//debug
+            console.log('fetchedCharacters',fetchedCharacters);//debug
+            console.log('dm2:',campaignData.dm)//debug
+
+
+            // const playerCharacter = await fetchPlayerCharacterForCampaign(id); // Replace with actual API call
+            // setPlayerCharacterSheet(playerCharacter);
+            // setNotes(playerCharacter.notes || []);
+          } catch (error) {
+            console.log('Error:', error.message);
+          }
+        }
+      } catch (error) {
+        console.log('Error:', error.message);
       }
     };
 
     fetchCampaignData();
-  }, [id]);
+  }, []);
 
-  const fetchCampaign = async (campaignId) => {
-    return {
-      id: campaignId,
-      name: `Campaign ${campaignId}`,
-      description: `Description for Campaign ${campaignId}`,
-      isDungeonMaster: true // Replace with actual role check
-    };
-  };
+  // const fetchCampaign = async (campaignId) => {
+  //   return {
+  //     id: campaignId,
+  //     name: `Campaign ${campaignId}`,
+  //     description: `Description for Campaign ${campaignId}`,
+  //     isDungeonMaster: true // Replace with actual role check
+  //   };
+  // };
 
-  const fetchAllCharactersForCampaign = async (campaignId) => {
-    return [
-      {
-        id: 1,
-        name: 'Player 1',
-        class: 'Wizard',
-        level: 5,
-        health: 30,
-        armorClass: 15,
-        speed: 30,
-        passivePerception: 12,
-        image: 'path/to/image1.jpg' // Replace with actual image URL from the database. A default background color renders if no image is provided.
-      },
-      {
-        id: 2,
-        name: 'Player 2',
-        class: 'Rogue',
-        level: 3,
-        health: 25,
-        armorClass: 14,
-        speed: 35,
-        passivePerception: 15,
-        image: 'path/to/image2.jpg' // Need to replace this image url as well.
-      }
-    ];
-  };
+  // const fetchAllCharactersForCampaign = async (campaignId) => {
+  //   return [
+  //     {
+  //       id: 1,
+  //       name: 'Player 1',
+  //       class: 'Wizard',
+  //       level: 5,
+  //       health: 30,
+  //       armorClass: 15,
+  //       speed: 30,
+  //       passivePerception: 12,
+  //       image: 'path/to/image1.jpg' // Replace with actual image URL from the database. A default background color renders if no image is provided.
+  //     },
+  //     {
+  //       id: 2,
+  //       name: 'Player 2',
+  //       class: 'Rogue',
+  //       level: 3,
+  //       health: 25,
+  //       armorClass: 14,
+  //       speed: 35,
+  //       passivePerception: 15,
+  //       image: 'path/to/image2.jpg' // Need to replace this image url as well.
+  //     }
+  //   ];
+  // };
 
-  const fetchPlayerCharacterForCampaign = async (campaignId) => {
-    return {
-      name: 'Your Character',
-      class: 'Bard',
-      level: 4,
-      health: 28,
-      armorClass: 13,
-      speed: 30,
-      passivePerception: 14,
-      image: null, // No image available
-      notes: [
-        'Note 1: Do NOT trust the innkeeper.',
-        'Note 2: The bed was lumpy, -1 to saving throws.',
-        'Note 3: Small hands, good for thieving.'
-      ]
-    };
-  };
+  // const fetchPlayerCharacterForCampaign = async (campaignId) => {
+  //   return {
+  //     name: 'Your Character',
+  //     class: 'Bard',
+  //     level: 4,
+  //     health: 28,
+  //     armorClass: 13,
+  //     speed: 30,
+  //     passivePerception: 14,
+  //     image: null, // No image available
+  //     notes: [
+  //       'Note 1: Do NOT trust the innkeeper.',
+  //       'Note 2: The bed was lumpy, -1 to saving throws.',
+  //       'Note 3: Small hands, good for thieving.'
+  //     ]
+  //   };
+  // };
 
   const handleAddNote = () => {
     if (newNote.trim()) {
@@ -141,7 +201,7 @@ const CampaignDetails = () => {
                   key={character.id}
                   className="character-snapshot card"
                   onClick={() => handleCharacterClick(character.id)}
-                  style={{ backgroundImage: character.image ? `url(${character.image})` : 'none' }}
+                  style={{ backgroundImage: character.image ? `url(${character.image})` : 'url(https://images.pexels.com/photos/3359734/pexels-photo-3359734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
                 >
                   {!character.image && (
                     <div className="placeholder">
@@ -168,6 +228,8 @@ const CampaignDetails = () => {
         ) : (
           <CharacterSheet character={playerCharacterSheet} />
         )}
+        
+        {/* following is the notes section */}
         <div className="notes-section">
           <h3>Notes</h3>
           <textarea
