@@ -154,12 +154,53 @@ const CampaignDetails = () => {
   //   };
   // };
 
+  const [singleNote, setSingleNote] = useState({
+    'title': '',
+    'text': '',
+    'user_id':'',
+    'campaign_id':''
+  });
+
   const handleAddNote = () => {
     if (newNote.trim()) {
       setNotes([...notes, newNote.trim()]);
+      setNewNote(newNote.trim());
+      setSingleNote({
+        'title': '',
+        'text': newNote,
+        'user_id': decodedToken.sub.userId,
+        'campaign_id': id
+      });
+        const postNote = async () => {
+          try {
+            const response = await fetch('http://127.0.0.1:5000/notes/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                'title': singleNote.title,
+                'text': singleNote.text,
+                'user_id': singleNote.user_id,
+                'campaign_id': singleNote.campaign_id
+              })
+            });
+            if (!response.ok) {
+              throw new Error(`HTTP Error: ${response.status}`);
+            }
+            console.log('Note added successfully');
+            setNewNote('');
+          } catch (error) {
+            console.log('Error:', error.message);
+          }
+        }
+
+        postNote();
+      }
+
       setNewNote('');
     }
-  };
 
   const handleEditNote = (index) => {
     setEditingNote(index);
@@ -228,7 +269,7 @@ const CampaignDetails = () => {
         ) : (
           <CharacterSheet character={playerCharacterSheet} />
         )}
-        
+
         {/* following is the notes section */}
         <div className="notes-section">
           <h3>Notes</h3>
