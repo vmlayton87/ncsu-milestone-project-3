@@ -20,7 +20,7 @@ const CampaignCard = ({ campaign }) => {
     return (
         <div className="card-container" onClick={handleClick}>
             <div className="card">
-                <div className="card-front" style={{ backgroundImage: `url(${campaign.image_url})`}}>
+                <div className="card-front" style={{ backgroundImage: campaign.image_url? `url(${campaign.image_url})`:`url(https://images.pexels.com/photos/6489543/pexels-photo-6489543.jpeg?auto=compress&cs=tinysrgb&w=600)`}}>
                     <h3>{campaign.name}</h3>
                 </div>
                 <div className="card-back">
