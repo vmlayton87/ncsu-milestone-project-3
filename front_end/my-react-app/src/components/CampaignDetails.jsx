@@ -234,9 +234,6 @@ const CampaignDetails = () => {
   };
 
   const handleSaveEditedNote = (noteId) => {
-    // const updatedNotes = [...notes];
-    // updatedNotes[noteId] = editedNoteText.trim();
-    // setNotes(updatedNotes);
 
     const putNote = async () => {
       try {
@@ -270,9 +267,27 @@ const CampaignDetails = () => {
   setEditedNoteText('');
 }
 
-  const handleDeleteNote = (index) => {
-    const updatedNotes = notes.filter((_, noteIndex) => noteIndex !== index);
-    setNotes(updatedNotes);
+  const handleDeleteNote = (noteId) => {
+    const deleteNote = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/notes/${noteId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+        console.log('Note deleted successfully');
+        fetchNotes();
+      } catch (error) {
+        console.log('Error:', error.message);
+      }
+    }
+    deleteNote();
   };
 
   const handleCharacterClick = (characterId) => {
