@@ -55,7 +55,6 @@ def create_character(campaign_id):
 
 # Route to fetch all campaigns the user is a part of but not the DM of
 @campaign_bp.route('/eligible', methods=['GET'])
-@cross_origin()
 @jwt_required()
 def get_eligible_campaigns():
 
