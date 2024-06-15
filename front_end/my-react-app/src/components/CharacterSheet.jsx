@@ -18,9 +18,9 @@ const CharacterSheetApp = ({characterData}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const characterIdObject = useParams();
-  const characterId = characterIdObject.id;
-  
+  // const characterIdObject = useParams();
+  // const characterId = characterIdObject.id;
+  const {characterId} = useParams()
   const [character, setCharacter] = useState({});
   const [eligibleCampaigns, setEligibleCampaigns] = useState([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState('');

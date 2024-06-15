@@ -153,9 +153,12 @@ def add_char_to_camp():
         if campaign.dm == user.id:
             return jsonify({"error": "You cannot add a character to a campaign you are the DM of"}), 403
 
-        if any(char for char in campaign.characters if char.user_id == user_id):
+        # if any(char for char in campaign.characters if char.user_id == user_id):
+        #     return jsonify({"error": "You already have a character in this campaign"}), 400
+        
+        if any(char.character.user_id == user_id for char in campaign.characters):
             return jsonify({"error": "You already have a character in this campaign"}), 400
-
+    
         char_campaign = CharacterCampaigns(character_id=char_id, campaign_id=campaign_id, character=character, campaign=campaign)
         
         db.session.add(char_campaign)
