@@ -13,6 +13,7 @@ user_bp = Blueprint('user', __name__, url_prefix='/users')
 # ROUTES
 # try except is like try catch, Exception is all the errors, the as a variable helps to do something with the error.
 
+# test merge
 # GET route
 @user_bp.route('/', methods=['GET'])
 # get all notes and turn it in a json object
