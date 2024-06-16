@@ -4,6 +4,8 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
 import { useNavigate } from "react-router-dom";
 
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
 const Login = () => {
     const [formData, setFormData] = useState({
         username: '',
@@ -22,7 +24,7 @@ const Login = () => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
         try {
-            const response = await fetch('http://127.0.0.1:5000/auth/login', {
+            const response = await fetch(`${serverUrl}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

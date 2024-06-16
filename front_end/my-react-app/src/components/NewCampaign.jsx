@@ -5,6 +5,8 @@ import '../index.scss';
 import { getToken } from "../utils/auth";
 import { useNavigate } from 'react-router-dom';
 
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
 const NewCampaign = () => {
 
     const token = getToken(); 
@@ -30,7 +32,7 @@ const NewCampaign = () => {
         e.preventDefault();
         // Handle form submission, validation, and API call here
         try {
-            const response = await fetch('http://127.0.0.1:5000/usercamp/', {
+            const response = await fetch(`${serverUrl}/usercamp/`, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${token}`,

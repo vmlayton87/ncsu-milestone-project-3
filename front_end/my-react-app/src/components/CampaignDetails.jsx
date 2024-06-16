@@ -6,6 +6,8 @@ import CharacterSheet from "./CharacterSheet.jsx"
 import CharacterSheetApp from "./CharacterSheet.jsx"
 import '../index.scss'
 
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
 // Steps to implement dm/player view:
 // - add states to manage campaign data, user role, and character sheets
 // - Fetch the necessary data based on the campaign and user role
@@ -37,7 +39,7 @@ const CampaignDetails = () => {
   // },[campaign])
 
   //   const fetchCampaignData = async ()=>{
-  //     const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}`, {
+  //     const response = await fetch(`${serverUrl}/campaigns/${id}`, {
   //       method: 'GET',
   //       headers: {
   //         'Content-Type': 'application/json',
@@ -61,7 +63,7 @@ const CampaignDetails = () => {
 
   //   // fetches all characters if the dm, fetches only your character if not the dm
   //   const fetchCampaignCharacters = async () => {
-  //     const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}/characters`, {
+  //     const response = await fetch(`${serverUrl}/campaigns/${id}/characters`, {
   //       method: 'GET',
   //       headers: {
   //         'Content-Type': 'application/json',
@@ -94,7 +96,7 @@ const CampaignDetails = () => {
       async function fetchCharactersByIds(charIds) {
         // Array to store fetch promises
         const fetchPromises = charIds.map(charId => {
-          return fetch(`http://127.0.0.1:5000/characters/${charId}`, {
+          return fetch(`${serverUrl}/characters/${charId}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -129,7 +131,7 @@ const CampaignDetails = () => {
       //function ends here//
 
       try {
-        const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}`, {
+        const response = await fetch(`${serverUrl}/campaigns/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -147,7 +149,7 @@ const CampaignDetails = () => {
         if (campaignData.dm === decodedToken.sub.userId) {
           setIsDungeonMaster(true);
           try {
-            const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}/characters`, {
+            const response = await fetch(`${serverUrl}/campaigns/${id}/characters`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -184,7 +186,7 @@ const CampaignDetails = () => {
           setIsDungeonMaster(false);
 
           try {
-            const response = await fetch(`http://127.0.0.1:5000/campaigns/${id}/characters`, {
+            const response = await fetch(`${serverUrl}/campaigns/${id}/characters`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -207,7 +209,7 @@ const CampaignDetails = () => {
 
             const fetchPlayerCharacter = async () => {
               try {
-                const response = await fetch(`http://127.0.0.1:5000/characters/${playerCharacterId}`, {
+                const response = await fetch(`${serverUrl}/characters/${playerCharacterId}`, {
                   method: 'GET',
                   headers: {
                     'Content-Type': 'application/json',
@@ -255,7 +257,7 @@ const CampaignDetails = () => {
 
     const fetchNotes = async () => {
       try {
-        const response =  await fetch(`http://127.0.0.1:5000/notes/${id}`,{
+        const response =  await fetch(`${serverUrl}/notes/${id}`,{
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -335,7 +337,7 @@ const CampaignDetails = () => {
     if (newNote.trim()) {
         const postNote = () => {
           try {
-            const response = fetch('http://127.0.0.1:5000/notes/', {
+            const response = fetch(`${serverUrl}/notes/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -382,7 +384,7 @@ const CampaignDetails = () => {
 
     const putNote = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/notes/${noteId}`, {
+        const response = await fetch(`${serverUrl}/notes/${noteId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -415,7 +417,7 @@ const CampaignDetails = () => {
   const handleDeleteNote = (noteId) => {
     const deleteNote = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/notes/${noteId}`, {
+        const response = await fetch(`${serverUrl}/notes/${noteId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

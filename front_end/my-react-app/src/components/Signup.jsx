@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import '../index.scss';
 
+
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
+
 const Signup = () => {
     const [formData, setFormData] = useState({
         username: '',
@@ -37,7 +41,7 @@ const Signup = () => {
                 password: formData.password
             }
 
-            const response = await fetch ('http://127.0.0.1:5000/auth/register',{
+            const response = await fetch (`${serverUrl}/auth/register`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

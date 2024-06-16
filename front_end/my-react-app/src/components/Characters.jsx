@@ -4,6 +4,8 @@ import '../index.scss';
 import { getToken } from "../utils/auth";
 import { Button, Container, Row, Col } from 'react-bootstrap';
 
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
 const Characters = () => {
   const [characters, setCharacters] = useState([]);
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const Characters = () => {
     const fetchData = async () => {
       try {
         const token = getToken();
-        const response = await fetch('http://127.0.0.1:5000/characters/', {
+        const response = await fetch(`${serverUrl}/characters/`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

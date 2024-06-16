@@ -6,6 +6,8 @@ import CampaignCard from "./CampaignCard";
 import { getToken } from "../utils/auth";
 import { useNavigate } from 'react-router-dom';
 
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
 // Import images
 // import image1 from '../assets/cardimage-1.jpg'
 // import image2 from '../assets/cardimage-2.jpg'
@@ -25,7 +27,7 @@ const Dashboard = () => {
         const fetchUserCampaigns = async () => {
           try {
             
-            const response = await fetch('http://127.0.0.1:5000/usercamp/', {
+            const response = await fetch(`${serverUrl}/usercamp/`, {
               method: 'GET',
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -51,7 +53,7 @@ const Dashboard = () => {
         const fetchAllCampaigns = async () => {
           try {
              
-            const response = await fetch('http://127.0.0.1:5000/campaigns/', {
+            const response = await fetch(`${serverUrl}/campaigns/`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -111,7 +113,7 @@ const Dashboard = () => {
         // Handle the form submission
         try {
             const token = getToken(); 
-            const response = await fetch('http://127.0.0.1:5000/usercamp/join', {
+            const response = await fetch(`${serverUrl}/usercamp/join`, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${token}`,

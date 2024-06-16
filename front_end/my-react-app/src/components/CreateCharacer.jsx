@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { getToken } from "../utils/auth";
 import '../index.scss';
 
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
 const CreateCharacter = () => {
 
   const token = getToken();
@@ -39,7 +41,7 @@ const CreateCharacter = () => {
 
   const saveCharacter = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/characters/', {
+      const response = await fetch(`${serverUrl}/characters/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

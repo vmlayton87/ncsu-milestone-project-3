@@ -6,6 +6,8 @@ import { DnDCharacterStatsSheet, DnDCharacter } from 'dnd-character-sheets';
 import 'dnd-character-sheets/dist/index.css';
 import Gideon from "../testCharacters/gideon.json";
 
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
+
 // class CharacterSheet extends Component {
 //   render() {
 //     return <DnDCharacterStatsSheet character={Gideon}/>
@@ -34,7 +36,7 @@ const CharacterSheetApp = ({characterData}) => {
   // fetch single character
   const fetchCharacterData = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+      const response = await fetch(`${serverUrl}/characters/${characterId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -53,7 +55,7 @@ const CharacterSheetApp = ({characterData}) => {
 
   const fetchEligibleCampaigns = async () => {
     
-    const response = await fetch('http://127.0.0.1:5000/campaigns/eligible', {
+    const response = await fetch(`${serverUrl}/campaigns/eligible`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -96,7 +98,7 @@ const CharacterSheetApp = ({characterData}) => {
       const flattedCharacter = flattenObject(character);
       console.log('flattedCharacter',flattedCharacter);
 
-      const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+      const response = await fetch(`${serverUrl}/characters/${characterId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -121,7 +123,7 @@ const CharacterSheetApp = ({characterData}) => {
 // adds character to selected campaign
 const handleAddCharacterToCampaign = async () => {
     
-    const response = await fetch(`http://127.0.0.1:5000/characters/addToCampaign`, {
+    const response = await fetch(`${serverUrl}/characters/addToCampaign`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -140,7 +142,7 @@ const handleAddCharacterToCampaign = async () => {
 const deleteCharacter = async () => {
   try {
     const token = getToken();
-    const response = await fetch(`http://127.0.0.1:5000/characters/${characterId}`, {
+    const response = await fetch(`${serverUrl}/characters/${characterId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -220,7 +222,7 @@ const deleteCharacter = async () => {
   //   }
   // }
   return (
-    <div className="character-sheet-container">
+    <div className="character-sheet-page">
       {location.pathname.includes('/campaigns') ? (
         <>
           {statsSheet}
